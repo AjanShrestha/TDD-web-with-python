@@ -16,3 +16,4 @@ Part 1:
 
 - [chapter_01](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_01)
 - [chapter_02_unittest](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_02_unittest)
+- [chapter_03_unit_test_first_view](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_03_unit_test_first_view)
