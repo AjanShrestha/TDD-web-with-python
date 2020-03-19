@@ -34,6 +34,33 @@
 # * Can we make this view function return some HTML which wll get the
 #   functional test to pass?
 
+
+# On the Merits of Trivial Tests for Trivial Functions
+# In the short term it may feel a bit silly to write tests for simple
+# functions and constants.
+# Rigorous TDD is like a kata in a martial art, the idea is to learn
+# the motions in a controlled context, when there is no adversity, so
+# that the techniques are part of your muscle memory. The problem
+# comes when your application gets complex -- that's when you really
+# need your tests. And the danger is that complexity tends to sneak
+# up on you, gradually. You may not notice it happening, but quite
+# soon you're a boiled frog.
+# Two other things in favor of tiny, simple tests for simple
+# functions.
+# 1. Firstly, if they're really trivial tests, then they won't take
+#   you that long to write them. So, stop moaning and just write them
+#   already.
+# 2. Secondly, it's always good to have a placeholder. Having a test
+#   there for a simple function means it's that much less a
+#   psychological barrier to overcome when the simple function gets a
+#   tiny bit more complex. Because it's had tests from the very
+#   beginning, adding a new test each time has felt quite natural,
+#   and it's well tested. The alternative involves trying to decide
+#   when a function becomes “complicated enough”, which is highly
+#   subjective, but worse, because there’s no placeholder, it seems
+#   like that much more effort, and you’re tempted each time to put
+#   it off a little longer, and pretty soon—frog soup!
+
 from django.urls import resolve
 from django.test import TestCase
 from django.http import HttpRequest
