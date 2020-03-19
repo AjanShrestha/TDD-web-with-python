@@ -34,9 +34,37 @@
 # * Can we make this view function return some HTML which wll get the
 #   functional test to pass?
 
-from django.urls import resolve
-from django.test import TestCase
+
+# On the Merits of Trivial Tests for Trivial Functions
+# In the short term it may feel a bit silly to write tests for simple
+# functions and constants.
+# Rigorous TDD is like a kata in a martial art, the idea is to learn
+# the motions in a controlled context, when there is no adversity, so
+# that the techniques are part of your muscle memory. The problem
+# comes when your application gets complex -- that's when you really
+# need your tests. And the danger is that complexity tends to sneak
+# up on you, gradually. You may not notice it happening, but quite
+# soon you're a boiled frog.
+# Two other things in favor of tiny, simple tests for simple
+# functions.
+# 1. Firstly, if they're really trivial tests, then they won't take
+#   you that long to write them. So, stop moaning and just write them
+#   already.
+# 2. Secondly, it's always good to have a placeholder. Having a test
+#   there for a simple function means it's that much less a
+#   psychological barrier to overcome when the simple function gets a
+#   tiny bit more complex. Because it's had tests from the very
+#   beginning, adding a new test each time has felt quite natural,
+#   and it's well tested. The alternative involves trying to decide
+#   when a function becomes “complicated enough”, which is highly
+#   subjective, but worse, because there’s no placeholder, it seems
+#   like that much more effort, and you’re tempted each time to put
+#   it off a little longer, and pretty soon—frog soup!
+
 from django.http import HttpRequest
+from django.urls import resolve
+from django.template.loader import render_to_string
+from django.test import TestCase
 
 from lists.views import home_page
 
@@ -52,27 +80,13 @@ class HomePageTest(TestCase):
     #   actually return the HTML we want.
     # Every single code change is driven by the tests!
 
+    # Don't test constants e.g. HTML as text
+    # Unit tests are really about testing logic, flow control, and
+    # configuration.
     def test_home_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = home_page(request)
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>To-Do lists</title>', html)
-        self.assertTrue(html.endswith('</html>'))
-    # 1. We create an HttpRequest object, which is what Django will
-    #   see when a user's browser asks for a page.
-    # 2. We pass it to our home_page view, which gives us a response.
-    #   You won't be surprised to hear that this object is an
-    #   instance of a class called HttpResponse.
-    # 3. Then, we extract the .content of the response. These are the
-    #   raw bytes, the ones and zeros that would be sent down the
-    #   wire to the user's browser. We call .decode() to convert them
-    #   into the string of HTML that's being sent to the user.
-    # 4. We want it to start with an <html> tag which gets closed at
-    #   the end.
-    # 5. And we want a <title> tag somewhere in the middle, with the
-    #   words "To-Do lists" in it -- because that's what we specified
-    #   in our functional test.
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
+    # Instead of testing constants we're testing our implementation
 
 #                Useful Commands and Concepts
 # Running the Django dev server
