@@ -68,3 +68,10 @@ if __name__ == "__main__":
 #       from the local PC
 #   Checking (making a test assertion) that the page has the word
 #       "Django" in its title
+
+#                            Useful TDD Concepts
+# User Story
+#   A description of how the application will work from the point of
+#      view of the user.
+# Expected failure
+#   When a test fails in the way that we expected it to.
