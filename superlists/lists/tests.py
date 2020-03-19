@@ -36,6 +36,8 @@
 
 from django.urls import resolve
 from django.test import TestCase
+from django.http import HttpRequest
+
 from lists.views import home_page
 
 
@@ -49,3 +51,25 @@ class HomePageTest(TestCase):
     # 2. What function is that? It's the view function which will
     #   actually return the HTML we want.
     # Every single code change is driven by the tests!
+
+    def test_home_page_returns_correct_html(self):
+        request = HttpRequest()
+        response = home_page(request)
+        html = response.content.decode('utf8')
+        self.assertTrue(html.startswith('<html>'))
+        self.assertIn('<title>To-Do lists</title>', html)
+        self.assertTrue(html.endswith('</html>'))
+    # 1. We create an HttpRequest object, which is what Django will
+    #   see when a user's browser asks for a page.
+    # 2. We pass it to our home_page view, which gives us a response.
+    #   You won't be surprised to hear that this object is an
+    #   instance of a class called HttpResponse.
+    # 3. Then, we extract the .content of the response. These are the
+    #   raw bytes, the ones and zeros that would be sent down the
+    #   wire to the user's browser. We call .decode() to convert them
+    #   into the string of HTML that's being sent to the user.
+    # 4. We want it to start with an <html> tag which gets closed at
+    #   the end.
+    # 5. And we want a <title> tag somewhere in the middle, with the
+    #   words "To-Do lists" in it -- because that's what we specified
+    #   in our functional test.
