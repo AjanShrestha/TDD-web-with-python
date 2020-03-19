@@ -1,6 +1,6 @@
-# TDD-web-with-python
+# Test-Driven Web Development With Python
 
-Example code for the book on TDD with Python http://www.obeythetestinggoat.com
+This repository contains all the example code from my book, "Test-Driven Web Development with Python", available at www.obeythetestinggoat.com
 
 ## Checking out code for individual chapters
 
