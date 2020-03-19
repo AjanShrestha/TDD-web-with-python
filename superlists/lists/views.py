@@ -20,4 +20,15 @@ from django.shortcuts import render
 
 
 def home_page(request):
-    return HttpResponse('<html><title>To-Do lists</title></html>')
+    # Refactor - when we try to improve the code without changing its
+    # functionality
+    return render(request, 'home.html')
+    # Instead of building our own HttpResponse, we now use the Django
+    # render function. It takes the request as its first parameter
+    # and the name of the template to render. Django will
+    # automatically search folders called templates inside any of
+    # your apps’ directories. Then it builds an HttpResponse for you,
+    # based on the content of the template.
+    # Templates are a very powerful feature of Django’s, and their
+    # main strength consists of substituting Python variables into
+    # HTML text.

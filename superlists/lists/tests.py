@@ -79,13 +79,16 @@ class HomePageTest(TestCase):
     #   actually return the HTML we want.
     # Every single code change is driven by the tests!
 
+    # Don't test constants e.g. HTML as text
+    # Unit tests are really about testing logic, flow control, and
+    # configuration.
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()
         response = home_page(request)
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<title>To-Do lists</title>', html)
-        self.assertTrue(html.endswith('</html>'))
+        self.assertTrue(html.strip().endswith('</html>'))
     # 1. We create an HttpRequest object, which is what Django will
     #   see when a user's browser asks for a page.
     # 2. We pass it to our home_page view, which gives us a response.
