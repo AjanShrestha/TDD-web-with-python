@@ -14,5 +14,5 @@ Here is the list of chapter branches, as of 2020-03-19:
 
 Part 1:
 
-[chapter_01](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_01)
-[chapter_02_unittest](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_02_unittest)
+- [chapter_01](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_01)
+- [chapter_02_unittest](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_02_unittest)
