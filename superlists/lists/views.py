@@ -20,8 +20,11 @@ from django.shortcuts import render
 
 
 def home_page(request):
-    # Refactor - when we try to improve the code without changing its
+    # Refactor
+    # When we try to improve the code without changing its
     # functionality
+    # When refactoring, work on either the code or the tests, but not
+    # both at once.
     return render(request, 'home.html')
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
