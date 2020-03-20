@@ -25,7 +25,9 @@ def home_page(request):
     # functionality
     # When refactoring, work on either the code or the tests, but not
     # both at once.
-    return render(request, 'home.html')
+    return render(request, 'home.html', {
+        'new_item_text': request.POST.get('item_text', ''),
+    })
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
     # and the name of the template to render. Django will

@@ -71,22 +71,19 @@ from lists.views import home_page
 
 class HomePageTest(TestCase):
 
-    def test_root_url_resolves_to_home_page_view(self):
-        found = resolve('/')
-        self.assertEqual(found.func, home_page)
-    # 1. resolve is the function Django uses internally to resolve
-    #   URLs and find what view function they should map to.
-    # 2. What function is that? It's the view function which will
-    #   actually return the HTML we want.
     # Every single code change is driven by the tests!
-
     # Don't test constants e.g. HTML as text
     # Unit tests are really about testing logic, flow control, and
     # configuration.
-    def test_home_page_returns_correct_html(self):
+    def test_uses_home_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
     # Instead of testing constants we're testing our implementation
+
+    def test_can_save_a_POST_request(self):
+        response = self.client.post('/', data={'item_text': 'A new list item'})
+        self.assertIn('A new list item', response.content.decode())
+        self.assertTemplateUsed(response, 'home.html')
 
 #                Useful Commands and Concepts
 # Running the Django dev server
@@ -100,3 +97,27 @@ class HomePageTest(TestCase):
 # 1. Run the unit tests in the terminal
 # 2. Make a minimal code change in the editor
 # 3. Repeat!
+
+
+#                 Red/Green/Refactor and Traingulation
+# The unit-test/code cycle is sometimes taught as Red, Green,
+# Refactor:
+# * Start by writing a unit test which fails (Red).
+# * Write the simplest possible code to get it to pass (Green), even
+#   if that means cheating.
+# * Refactor to get to better code that makes more sense.
+
+# So what do we do during the Refactor stage? What justifies moving
+# from an implementation where we “cheat” to one we’re happy with?
+# One methodology is eliminate duplication: if your test uses a magic
+# constant (like the “1:” in front of our list item), and your
+# application code also uses it, that counts as duplication, so it
+# justifies refactoring. Removing the magic constant from the
+# application code usually means you have to stop cheating.
+# I find that leaves things a little too vague, so I usually like to
+# use a second technique, which is called triangulation:
+#   If your tests let you get away with writing “cheating” code that
+#       you’re not happy with, like returning a magic constant, write
+#       another test that forces you to write some better code.
+#       That’s what we’re doing when we extend the FT to check that
+#       we get a “2:” when inputting a second list item.
