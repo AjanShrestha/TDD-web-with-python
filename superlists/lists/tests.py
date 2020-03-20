@@ -86,12 +86,14 @@ class HomePageTest(TestCase):
         self.assertEqual(Item.objects.count(), 0)
 
     def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={'item_text': 'A new list item'})
+        self.client.post('/', data={'item_text': 'A new list item'})
 
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'A new list item')
 
+    def test_redirects_after_POST(self):
+        response = self.client.post('/', data={'item_text': 'A new list item'})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/')
 
@@ -162,3 +164,10 @@ class ItemModelTest(TestCase):
 # test, the high-level functional tests which test the application
 # from the user’s point of view, and these lower-level tests which
 # test it from the programmer’s point of view.
+
+#   Better Unit Testing Practice: Each Test Should Test One Thing
+# Good unit testing practice says that each test should only test one
+# thing. The reason is that it makes it easier to track down bugs.
+# Having multiple assertions in a test means that, if the test fails
+# on an early assertion, you don’t know what the status of the later
+# assertions is.
