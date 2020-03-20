@@ -223,3 +223,9 @@ class ItemModelTest(TestCase):
 #   A place to write down things that occur to us as we’re coding, so
 #   that we can finish up what we’re doing and come back to them
 #   later.
+
+
+# A second clue is the rule of thumb that, when all the unit tests
+# are passing but the functional tests aren’t, it’s often pointing at
+# a problem that’s not covered by the unit tests, and in our case,
+# that’s often a template problem.
