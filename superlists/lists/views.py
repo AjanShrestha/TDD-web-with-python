@@ -14,7 +14,9 @@
 #   response.
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from lists.models import Item
 
 # Create your views here.
 
@@ -25,7 +27,11 @@ def home_page(request):
     # functionality
     # When refactoring, work on either the code or the tests, but not
     # both at once.
-    return render(request, 'home.html')
+    if request.method == 'POST':
+        Item.objects.create(text=request.POST['item_text'])
+        return redirect('/')
+    items = Item.objects.all()
+    return render(request, 'home.html', {'items': items})
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
     # and the name of the template to render. Django will
