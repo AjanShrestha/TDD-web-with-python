@@ -19,3 +19,4 @@ Part 1:
 - [chapter_03_unit_test_first_view](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_03_unit_test_first_view)
 - [chapter_04_philosophy_and_refactoring](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_04_philosophy_and_refactoring)
 - [chapter_05_post_and_database](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_05_post_and_database)
+- [chapter_06_explicit_waits](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_06_explicit_waits)
