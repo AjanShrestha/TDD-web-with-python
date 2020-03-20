@@ -115,7 +115,7 @@ class ListViewTest(TestCase):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
 
-        response = self.client.get('/lists/the-only-list-in-the-world')
+        response = self.client.get('/lists/the-only-list-in-the-world/')
 
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
