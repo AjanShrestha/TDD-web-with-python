@@ -66,6 +66,7 @@ from django.urls import resolve
 from django.template.loader import render_to_string
 from django.test import TestCase
 
+from lists.models import Item
 from lists.views import home_page
 
 
@@ -84,6 +85,25 @@ class HomePageTest(TestCase):
         response = self.client.post('/', data={'item_text': 'A new list item'})
         self.assertIn('A new list item', response.content.decode())
         self.assertTemplateUsed(response, 'home.html')
+
+
+class ItemModelTest(TestCase):
+    def test_saving_and_retrieving_items(self):
+        first_item = Item()
+        first_item.text = 'The first (ever) list item'
+        first_item.save()
+
+        second_item = Item()
+        second_item.text = 'Item the second'
+        second_item.save()
+
+        saved_items = Item.objects.all()
+        self.assertEqual(saved_items.count(), 2)
+
+        first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
+        self.assertEqual(first_saved_item.text, 'The first (ever) list item')
+        self.assertEqual(second_saved_item.text, 'Item the second')
 
 #                Useful Commands and Concepts
 # Running the Django dev server
@@ -121,3 +141,15 @@ class HomePageTest(TestCase):
 #       another test that forces you to write some better code.
 #       That’s what we’re doing when we extend the FT to check that
 #       we get a “2:” when inputting a second list item.
+
+
+#      Unit Tests Versus Integrated Tests, and the Database
+# Purists will tell you that a “real” unit test should never touch
+# the database, and that the test I’ve just written should be more
+# properly called an integrated test, because it doesn’t only test
+# our code, but also relies on an external system—that is, a database.
+
+# It’s OK to ignore this distinction for now—we have two types of
+# test, the high-level functional tests which test the application
+# from the user’s point of view, and these lower-level tests which
+# test it from the programmer’s point of view.
