@@ -30,8 +30,7 @@ def home_page(request):
     if request.method == 'POST':
         Item.objects.create(text=request.POST['item_text'])
         return redirect('/lists/the-only-list-in-the-world/')
-    items = Item.objects.all()
-    return render(request, 'home.html', {'items': items})
+    return render(request, 'home.html')
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
     # and the name of the template to render. Django will
