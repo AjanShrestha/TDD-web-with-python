@@ -21,3 +21,7 @@ Part 1:
 - [chapter_05_post_and_database](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_05_post_and_database)
 - [chapter_06_explicit_waits](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_06_explicit_waits)
 - [chapter_07_working_incrementally](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_07_working_incrementally)
+
+Part 2:
+
+- [chapter_08_prettification](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_08_prettification)

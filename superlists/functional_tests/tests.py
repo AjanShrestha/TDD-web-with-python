@@ -11,7 +11,7 @@
 # to them.
 
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
@@ -21,7 +21,7 @@ import time
 MAX_WAIT = 10
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
@@ -129,6 +129,31 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Satisfied, they both go back to sleep
 
+    def test_layout_and_styling(self):
+        # Edith goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # She notices the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
+
+        # She starts a new list and sees the input is nicely
+        # centered there too
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
+
 
 # First functional test (FT)
 # What it's doing
@@ -166,3 +191,26 @@ class NewVisitorTest(LiveServerTestCase):
 #   writing was highly unreliable in the Selenium 3 Firefox driver.
 #   “Explicit is better than implict”, as the Zen of Python says, so
 #   prefer explicit waits.
+
+
+#               On Testing Design and Layout
+# The short answer is: you shouldn’t write tests for design and
+# layout per se. It’s too much like testing a constant, and the tests
+# you write are often brittle.
+
+# With that said, the implementation of design and layout involves
+# something quite tricky: CSS and static files. As a result, it is
+# valuable to have some kind of minimal “smoke test” which checks
+# that your static files and CSS are working. It can help pick up
+# problems when you deploy your code to production.
+
+# Similarly, if a particular piece of styling required a lot of
+# client-side JavaScript code to get it to work (dynamic resizing is
+# one I’ve spent a bit of time on), you’ll definitely want some tests
+# for that.
+
+# Try to write the minimal tests that will give you confidence that
+# your design and layout is working, without testing what it actually
+# is. Aim to leave yourself in a position where you can freely make
+# changes to the design and layout, without having to go back and
+# adjust tests all the time.

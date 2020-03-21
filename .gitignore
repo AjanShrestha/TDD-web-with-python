@@ -134,7 +134,7 @@ dmypy.json
 geckodriver.log
 
 # UI
-./static
+/static
 
 # Custom Testing
 functional_tests/screendumps
