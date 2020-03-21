@@ -191,3 +191,26 @@ class NewVisitorTest(StaticLiveServerTestCase):
 #   writing was highly unreliable in the Selenium 3 Firefox driver.
 #   “Explicit is better than implict”, as the Zen of Python says, so
 #   prefer explicit waits.
+
+
+#               On Testing Design and Layout
+# The short answer is: you shouldn’t write tests for design and
+# layout per se. It’s too much like testing a constant, and the tests
+# you write are often brittle.
+
+# With that said, the implementation of design and layout involves
+# something quite tricky: CSS and static files. As a result, it is
+# valuable to have some kind of minimal “smoke test” which checks
+# that your static files and CSS are working. It can help pick up
+# problems when you deploy your code to production.
+
+# Similarly, if a particular piece of styling required a lot of
+# client-side JavaScript code to get it to work (dynamic resizing is
+# one I’ve spent a bit of time on), you’ll definitely want some tests
+# for that.
+
+# Try to write the minimal tests that will give you confidence that
+# your design and layout is working, without testing what it actually
+# is. Aim to leave yourself in a position where you can freely make
+# changes to the design and layout, without having to go back and
+# adjust tests all the time.
