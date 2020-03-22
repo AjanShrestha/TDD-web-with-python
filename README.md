@@ -25,3 +25,4 @@ Part 1:
 Part 2:
 
 - [chapter_08_prettification](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_08_prettification)
+- [chapter_09_manual_deployment](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_09_manual_deployment)

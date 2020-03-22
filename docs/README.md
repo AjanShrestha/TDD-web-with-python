@@ -96,3 +96,29 @@ And if we look in ../static, we’ll find all our CSS files:
 └── npm.js
 14 directories, 76 files
 ```
+
+## Server Debugging Tips
+
+Deployments are tricky! If ever things don’t go exactly as expected, here are a few tips and things to look out for:
+
+- I’m sure you already have, but double-check that each file is exactly where it should be and has the right contents—a single stray character can make all the difference.
+- Nginx error logs go into /var/log/nginx/error.log.
+- You can ask Nginx to “check” its config using the -t flag: nginx -t
+- Make sure your browser isn’t caching an out-of-date response. Use Ctrl-Refresh, or start a new private browser window.
+- This may be clutching at straws, but I’ve sometimes seen inexplicable behaviour on the server that’s only been resolved when I fully restarted it with a sudo reboot.
+
+If you ever get completely stuck, there’s always the option of blowing away your server and starting again from scratch! It should go faster the second time...
+
+## Test-Driving Server Configuration and Deployment
+
+- Tests take some of the uncertainty out of deployment
+
+  For developers, server administration is always “fun”, by which I mean, a process full of uncertainty and surprises. My aim during this chapter was to show that a functional test suite can take some of the uncertainty out of the process.
+
+- Typical pain points - database, static files, dependencies, custom settings
+
+  The things that you need to keep an eye out for on any deployment include your database configuration, static files, software dependencies, and custom settings that differ between development and production. You’ll need to think through each of these for your own deployments.
+
+- Tests allow us to experiment
+
+  Whenever we make a change to our server configuration, we can rerun the test suite, and be confident that everything works as well as it did before. It allows us to experiment with our setup with less fear.
