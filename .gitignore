@@ -138,3 +138,5 @@ geckodriver.log
 
 # Custom Testing
 functional_tests/screendumps
+
+.token
