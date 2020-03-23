@@ -65,6 +65,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         # function that we can pass as an argument, and that can be
         # executed later, and multiple times
 
+    def get_item_input_box(self):
+        return self.browser.find_element_by_id('id_text')
+
 
 # First functional test (FT)
 # What it's doing
