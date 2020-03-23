@@ -137,6 +137,12 @@ class ListViewTest(TestCase):
     # the render function -- the Django Client puts it on the
     # response object for us, to help with testing
 
+    def test_displays_item_form(self):
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}')
+        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertContains(response, 'name="text"')
+
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
         Item.objects.create(text='itemey 1', list=correct_list)
