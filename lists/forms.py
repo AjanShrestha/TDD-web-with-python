@@ -18,3 +18,6 @@ class ItemForm(forms.models.ModelForm):
                 'class': 'form-control input-lg'
             }),
         }
+        error_messages = {
+            'text': {'required': "You can't have an empty list item"}
+        }
