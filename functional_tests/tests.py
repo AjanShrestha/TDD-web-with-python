@@ -15,6 +15,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
+from unittest import skip
 import os
 import time
 
@@ -158,6 +159,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
             delta=10
         )
 
+    @skip
     def test_cannot_add_empty_list_items(self):
         # Edith goes to the home page and accidentally tries to submit
         # an empty list item. She hits Enter on the empty input box
@@ -235,3 +237,37 @@ class NewVisitorTest(StaticLiveServerTestCase):
 # is. Aim to leave yourself in a position where you can freely make
 # changes to the design and layout, without having to go back and
 # adjust tests all the time.
+
+
+#       Don’t Forget the “Refactor” in “Red, Green, Refactor”
+# A criticism that’s sometimes levelled at TDD is that it leads to
+# badly architected code, as the developer just focuses on getting
+# tests to pass rather than stopping to think about how the whole
+# system should be designed. I think it’s slightly unfair.
+
+# TDD is no silver bullet. You still have to spend time thinking
+# about good design. But what often happens is that people forget the
+# “Refactor” in “Red, Green, Refactor”. The methodology allows you to
+# throw together any old code to get your tests to pass, but it also
+# asks you to then spend some time refactoring it to improve its
+# design. Otherwise, it’s too easy to allow “technical debt” to build
+# up.
+
+# Often, however, the best ideas for how to refactor code don’t occur
+# to you straight away. They may occur to you days, weeks, even
+# months after you wrote a piece of code, when you’re working on
+# something totally unrelated and you happen to see some old code
+# again with fresh eyes. But if you’re halfway through something
+# else, should you stop to refactor the old code?
+
+# The answer is that it depends. In the case at the beginning of the
+# chapter, we haven’t even started writing our new code. We know we
+# are in a working state, so we can justify putting a skip on our new
+# FT (to get back to fully passing tests) and do a bit of refactoring
+# straight away.
+
+# Later in the chapter we’ll spot other bits of code we want to
+# alter. In those cases, rather than taking the risk of refactoring
+# an application that’s not in a working state, we’ll make a note of
+# the thing we want to change on our scratchpad and wait until we’re
+# back to a fully passing test suite before refactoring.
