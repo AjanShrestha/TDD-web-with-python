@@ -122,3 +122,10 @@ If you ever get completely stuck, there’s always the option of blowing away yo
 - Tests allow us to experiment
 
   Whenever we make a change to our server configuration, we can rerun the test suite, and be confident that everything works as well as it did before. It allows us to experiment with our setup with less fear.
+
+## More Debugging Tips
+
+- Check the Systemd logs for using sudo journalctl -u gunicorn-superlists-staging.ajprojects.xyz.
+- You can ask Systemd to check the validity of your service configuration: systemd-analyze verify /path/to/my.service.
+- Remember to restart both services whenever you make changes.
+- If you make changes to the Systemd config file, you need to run daemon-reload before systemctl restart to see the effect of your changes.
