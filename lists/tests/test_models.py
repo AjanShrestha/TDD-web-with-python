@@ -101,6 +101,7 @@ class ListAndItemModelTest(TestCase):
         item = Item(list=list_, text='')
         with self.assertRaises(ValidationError):
             item.save()
+            item.full_clean()
 
 
 #                Useful Commands and Concepts
