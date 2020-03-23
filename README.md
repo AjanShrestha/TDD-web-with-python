@@ -26,3 +26,4 @@ Part 2:
 
 - [chapter_08_prettification](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_08_prettification)
 - [chapter_09_manual_deployment](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_09_manual_deployment)
+- [chapter_10_11_automate_deployment_with_fabric](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_10_11_automate_deployment_with_fabric)
