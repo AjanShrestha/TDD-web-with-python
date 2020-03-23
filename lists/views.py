@@ -13,6 +13,7 @@
 # 3. The view function processes the request and returns an HTTP
 #   response.
 
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -42,7 +43,10 @@ def home_page(request):
 def new_list(request):
     list_ = List.objects.create()
     item = Item.objects.create(text=request.POST['item_text'], list=list_)
-    item.full_clean()
+    try:
+        item.full_clean()
+    except ValidationError:
+        pass
     return redirect(f'/lists/{list_.id}/')
 
 
