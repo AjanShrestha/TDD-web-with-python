@@ -129,3 +129,20 @@ If you ever get completely stuck, there’s always the option of blowing away yo
 - You can ask Systemd to check the validity of your service configuration: systemd-analyze verify /path/to/my.service.
 - Remember to restart both services whenever you make changes.
 - If you make changes to the Systemd config file, you need to run daemon-reload before systemctl restart to see the effect of your changes.
+
+## Producion-Readiness for Server Deployments
+
+A few things to think about when trying to build a production-ready server environment:
+
+- Don’t use the Django dev server in production
+
+  Something like Gunicorn or uWSGI is a better tool for running Django; they will let you run multiple workers, for example.
+
+- Don’t use Django to serve your static files
+
+  There’s no point in using a Python process to do the simple job of serving static files. Nginx can do it, but so can other web servers like Apache or uWSGI.
+
+- Check your settings.py for dev-only settings
+  DEBUG=True and ALLOWED_HOSTS are the two we looked at, but you will probably have others (send emails from the server).
+
+- Security
