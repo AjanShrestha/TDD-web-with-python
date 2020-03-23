@@ -17,6 +17,7 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from lists.forms import ItemForm
 from lists.models import Item, List
 
 # Create your views here.
@@ -28,7 +29,7 @@ def home_page(request):
     # functionality
     # When refactoring, work on either the code or the tests, but not
     # both at once.
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form', ItemForm()})
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
     # and the name of the template to render. Django will
