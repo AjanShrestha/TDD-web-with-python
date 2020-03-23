@@ -173,3 +173,19 @@ The whole point of having tests is to allow you to refactor your code! Use them,
 ### Try a generic wait_for helper
 
 Having specific helper methods that do explicit waits is great, and it helps to make your tests readable. But you’ll also often need an ad-hoc one-line assertion or Selenium interaction that you’ll want to add a wait to. self.wait_for does the job well for me, but you might find a slightly different pattern works for you.
+
+## On Database-Layer Validation
+
+I always like to push my validation logic down as low as possible.
+
+### Validation at the database layer is the ultimate guarantee of data integrity
+
+It can ensure that, no matter how complex your code at the layers above gets, you have guarantees at the lowest level that your data is valid and consistent.
+
+### But it comes at the expense of flexibility
+
+This benefit doesn’t come for free! It’s now impossible, even temporarily, to have inconsistent data. Sometimes you might have a good reason for temporarily storing data that breaks the rules rather than storing nothing at all. Perhaps you’re importing data from an external source in several stages, for example.
+
+### And it’s not designed for user-friendliness
+
+Trying to store invalid data will cause a nasty IntegrityError to come back from your database, and possibly the user will see a confusing 500 error page. As we’ll see in later chapters, forms-layer validation is designed with the user in mind, anticipating the kinds of helpful error messages we want to send them.
