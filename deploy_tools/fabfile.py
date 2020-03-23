@@ -3,7 +3,7 @@ from fabric.api import env, local, run
 import random
 import string
 
-REPO_URL = 'https://github.com:AjanShrestha/TDD-web-with-python.git'
+REPO_URL = 'https://github.com/AjanShrestha/TDD-web-with-python.git'
 
 
 def deploy():
