@@ -96,3 +96,16 @@ def _update_database(source_folder):
     )
     # The --noinput removes any interactive yes/no confirmations that
     # Fabric would find hard to deal with.
+
+
+#                        Fabric Configuration
+# If you are using an SSH key to log in, are storing it in the
+# default location, and are using the same username on the server as
+# locally, then Fabric should “just work”. If you aren’t, there are
+# several tweaks you may need to apply in order to get the fab
+# command to do your bidding. They revolve around the username, the
+# location of the SSH key to use, or the password.
+
+# You can pass these in to Fabric at the command line. Check out:
+#       $ fab --help
+# Or see the Fabric documentation for more info.
