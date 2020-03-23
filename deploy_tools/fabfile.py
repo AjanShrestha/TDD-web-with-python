@@ -87,3 +87,12 @@ def _update_static_files(source_folder):
         f'cd {source_folder}'
         ' && ../virtualenv/bin/python manage.py collectstatic --noinput'
     )
+
+
+def _update_database(source_folder):
+    run(
+        f'cd {source_folder}'
+        ' && ../virtualenv/bin/python manage.py migrate --noinput'
+    )
+    # The --noinput removes any interactive yes/no confirmations that
+    # Fabric would find hard to deal with.
