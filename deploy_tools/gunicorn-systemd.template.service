@@ -9,5 +9,5 @@ ExecStart=/home/aj/sites/SITENAME/virtualenv/bin/gunicorn \
     --bind unix:/tmp/SITENAME.socket \
     superlists.wsgi:application
 
-[install]
+[Install]
 WantedBy=multi-user.target
