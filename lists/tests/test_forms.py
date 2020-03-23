@@ -11,6 +11,10 @@ class ItemFormTest(TestCase):
         self.assertIn('class="form-control input-lg"', form.as_p())
         # form.as_p() renders the form as HTML.
 
+    def test_form_validation_for_blank_items(self):
+        form = ItemForm(data={'text': ''})
+        form.save()
+
 
 # Development-Driven Tests: Using Unit Tests for Exploratory Coding
 # Does this feel a bit like development-driven tests? That’s OK, now
