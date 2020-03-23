@@ -73,3 +73,10 @@ def _update_settings(source_folder, site_name):
     # I’m using a relative import (from .secret_key instead of from
     # secret_key) to be absolutely sure we’re importing the local
     # module, rather than one from some‐ where else on sys.path.
+
+
+def _update_virtualenv(source_folder):
+    virtualenv_folder = source_folder + '/../virtualenv'
+    if not exists(virtualenv_folder + '/bin/pip'):
+        run(f'python3 -m venv {virtualenv_folder}')
+    run(f'{virtualenv_folder}/bin/pip install -r {source_folder}/requirements.txt')
