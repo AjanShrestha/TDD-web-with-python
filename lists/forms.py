@@ -3,6 +3,9 @@ from django import forms
 from lists.models import Item
 
 
+EMPTY_ITEM_ERROR = "You can't have an empty list item"
+
+
 class ItemForm(forms.models.ModelForm):
     # ModelForms do all sorts of smart stuff, like assigning sensible
     # HTML form input types to different types of field, and applying
@@ -19,5 +22,5 @@ class ItemForm(forms.models.ModelForm):
             }),
         }
         error_messages = {
-            'text': {'required': "You can't have an empty list item"}
+            'text': {'required': EMPTY_ITEM_ERROR}
         }
