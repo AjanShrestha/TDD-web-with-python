@@ -131,6 +131,10 @@ class ListAndItemModelTest(TestCase):
             [item1, item2, item3]
         )
 
+    def test_string_representation(self):
+        item = Item(text='some text')
+        self.assertEqual(str(item), 'some text')
+
 
 #                Useful Commands and Concepts
 # Running the Django dev server
