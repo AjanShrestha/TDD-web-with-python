@@ -64,3 +64,11 @@ def view_list(request, list_id):
         'list.html',
         {'list': list_, "form": form}
     )
+
+
+# Our two views are now looking very much like “normal” Django views:
+# * they take information from a user’s request,
+# * combine it with some custom logic or information from the URL
+#    (list_id),
+# * pass it to a form for validation and possible saving, and
+# * then redirect or render a template.
