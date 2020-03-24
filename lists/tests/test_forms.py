@@ -19,6 +19,10 @@ class ItemFormTest(TestCase):
             [EMPTY_ITEM_ERROR]
         )
 
+    def test_form_handles_saving_to_a_list(self):
+        form = ItemForm(data={'text': 'do me'})
+        new_item = form.save()
+
 
 # Development-Driven Tests: Using Unit Tests for Exploratory Coding
 # Does this feel a bit like development-driven tests? That’s OK, now
