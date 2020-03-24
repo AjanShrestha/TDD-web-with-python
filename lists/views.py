@@ -17,6 +17,7 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from lists.forms import ItemForm
 from lists.models import Item, List
 
 # Create your views here.
@@ -28,7 +29,7 @@ def home_page(request):
     # functionality
     # When refactoring, work on either the code or the tests, but not
     # both at once.
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
     # Instead of building our own HttpResponse, we now use the Django
     # render function. It takes the request as its first parameter
     # and the name of the template to render. Django will
@@ -41,28 +42,33 @@ def home_page(request):
 
 
 def new_list(request):
-    list_ = List.objects.create()
-    item = Item(text=request.POST['item_text'], list=list_)
-    try:
-        item.full_clean()
-        item.save()
-    except ValidationError:
-        list_.delete()
-        error = "You can't have an empty list item"
-        return render(request, 'home.html', {"error": error})
-    return redirect(list_)
+    form = ItemForm(data=request.POST)
+    if form.is_valid():
+        list_ = List.objects.create()
+        form.save(for_list=list_)
+        return redirect(list_)
+    else:
+        return render(request, 'home.html', {"form": form})
 
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
-    error = None
-
+    form = ItemForm()
     if request.method == 'POST':
-        try:
-            item = Item(text=request.POST['item_text'], list=list_)
-            item.full_clean()
-            item.save()
+        form = ItemForm(data=request.POST)
+        if form.is_valid():
+            form.save(for_list=list_)
             return redirect(list_)
-        except ValidationError:
-            error = "You can't have an empty list item"
-    return render(request, 'list.html', {'list': list_, 'error': error})
+    return render(
+        request,
+        'list.html',
+        {'list': list_, "form": form}
+    )
+
+
+# Our two views are now looking very much like “normal” Django views:
+# * they take information from a user’s request,
+# * combine it with some custom logic or information from the URL
+#    (list_id),
+# * pass it to a form for validation and possible saving, and
+# * then redirect or render a template.
