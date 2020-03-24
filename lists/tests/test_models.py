@@ -119,7 +119,17 @@ class ListAndItemModelTest(TestCase):
         list2 = List.objects.create()
         Item.objects.create(list=list1, text='bla')
         item = Item(list=list2, text='bla')
-        item.full_clean()   # should not raise
+        item.full_clean()  # should not raise
+
+    def test_list_ordering(self):
+        list1 = List.objects.create()
+        item1 = Item(list=list1, text='item 1')
+        item2 = Item(list=list1, text='item 2')
+        item3 = Item(list=list1, text='item 3')
+        self.assertEqual(
+            Item.objects.all(),
+            [item1, item2, item3]
+        )
 
 
 #                Useful Commands and Concepts
