@@ -114,6 +114,13 @@ class ListAndItemModelTest(TestCase):
             item = Item(list=list_, text='foo')
             item.full_clean()
 
+    def test_CAN_save_same_item_to_different_lists(self):
+        list1 = List.objects.create()
+        list2 = List.objects.create()
+        Item.objects.create(list=list1, text='bla')
+        Item = Item(list=list2, text='bla')
+        item.full_clean()   # should not raise
+
 
 #                Useful Commands and Concepts
 # Running the Django dev server
