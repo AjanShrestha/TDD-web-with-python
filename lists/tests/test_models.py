@@ -118,7 +118,7 @@ class ListAndItemModelTest(TestCase):
         list1 = List.objects.create()
         list2 = List.objects.create()
         Item.objects.create(list=list1, text='bla')
-        Item = Item(list=list2, text='bla')
+        item = Item(list=list2, text='bla')
         item.full_clean()   # should not raise
 
 
