@@ -13,12 +13,11 @@
 # 3. The view function processes the request and returns an HTTP
 #   response.
 
-from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from lists.forms import ItemForm
-from lists.models import Item, List
+from lists.models import List
 
 # Create your views here.
 
