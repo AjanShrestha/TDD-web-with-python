@@ -10,7 +10,13 @@
 
 <body>
     <div id="qunit"></div>
-    <div id="qunit-fixture"></div>
+    <div id="qunit-fixture">
+        <form>
+            <input name="text" />
+            <div class="has-error">Error text</div>
+        </form>
+        <!--  jQuery resets the content of the fixtures div before each test -->
+    </div>
     <form>
         <input name="text" />
         <div class="has-error">Error text</div>
