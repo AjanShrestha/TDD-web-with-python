@@ -67,7 +67,7 @@ from django.test import TestCase
 from lists.models import Item, List
 
 
-class ListAndItemModelTest(TestCase):
+class ItemModelTest(TestCase):
 
     def test_default_text(self):
         item = Item()
@@ -79,10 +79,6 @@ class ListAndItemModelTest(TestCase):
         item.list = list_
         item.save()
         self.assertIn(item, list_.item_set.all())
-
-    def test_get_absolute_url(self):
-        list_ = List.objects.create()
-        self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
 
     def test_cannot_save_empty_list_items(self):
         list_ = List.objects.create()
@@ -118,6 +114,12 @@ class ListAndItemModelTest(TestCase):
     def test_string_representation(self):
         item = Item(text='some text')
         self.assertEqual(str(item), 'some text')
+
+
+class ListModelTest(TestCase):
+    def test_get_absolute_url(self):
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
 
 
 #                Useful Commands and Concepts
