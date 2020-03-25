@@ -26,20 +26,15 @@
     <script src="qunit-2.9.2.js"></script>
 
     <script>
-        QUnit.test("smoke test", function (assert) {
-            assert.equal($('.has-error').is(':visible'), true);
-            $('.has-error').hide();
+        QUnit.test("errors should be hidden on keypress", function (assert) {
+            $('input[name="text"]').trigger('keypress');
+            // The jQuery .trigger method is mainly used for testing. 
+            // It says “fire off a Jav‐ Script DOM event on the 
+            // element(s)”. Here we use the keypress event, which is 
+            // fired off by the browser behind the scenes whenever a 
+            // user types something into a particular input element.
             assert.equal($('.has-error').is(':visible'), false);
-        })
-
-        QUnit.test("smoke test 2", function (assert) {
-            assert.equal($('.has-error').is(':visible'), true);
-            $('.has-error').hide();
-            assert.equal($('.has-error').is(':visible'), false);
-        })
-        // What’s happening here is that the first test hides the
-        // error div, so when the second test runs, it starts out 
-        // invisible.
+        });
     </script>
 
 </body>
