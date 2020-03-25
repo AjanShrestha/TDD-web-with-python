@@ -40,7 +40,15 @@
     <script src="/static/list.js"></script>
 
     <script>
-        initialize();
+        // Whenever you have some JavaScript that interacts with the 
+        // DOM, it’s always good to wrap it in some “onload” 
+        // boilerplate code to make sure that the page has fully 
+        // loaded before it tries to do anything. Currently it works 
+        // anyway, because we’ve placed the <script> tag right at the 
+        // bottom of the page, but we shouldn’t rely on that.
+        $(document).ready(function() {
+            window.Superlists.initialize();
+        });
     </script>
 
     <!-- 
