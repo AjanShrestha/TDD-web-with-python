@@ -67,7 +67,10 @@ from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
 
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from lists.forms import (
+    DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
+    ExistingListItemForm, ItemForm
+)
 from lists.models import Item, List
 from lists.views import home_page
 
@@ -140,7 +143,7 @@ class ListViewTest(TestCase):
     def test_displays_item_form(self):
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.id}/')
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertContains(response, 'name="text"')
 
     def test_displays_only_items_for_that_list(self):
@@ -201,7 +204,7 @@ class ListViewTest(TestCase):
 
     def test_for_invalid_input_passes_from_to_template(self):
         response = self.post_invalid_input()
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
 
     def test_for_invalid_input_shows_error_on_page(self):
         response = self.post_invalid_input()
@@ -216,6 +219,19 @@ class ListViewTest(TestCase):
     # when you later come and change your code and accidentally
     # introduce a bug. Helper methods are one of the tools that lower
     # the psychological barrier.
+
+    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
+        list1 = List.objects.create()
+        item1 = Item.objects.create(list=list1, text='textey')
+        response = self.client.post(
+            f'/lists/{list1.id}/',
+            data={'text': 'textey'}
+        )
+
+        expected_error = escape(DUPLICATE_ITEM_ERROR)
+        self.assertContains(response, expected_error)
+        self.assertTemplateUsed(response, 'list.html')
+        self.assertEqual(Item.objects.all().count(), 1)
 
 
 #                Useful Commands and Concepts
@@ -329,3 +345,55 @@ class ListViewTest(TestCase):
 #   you think might be useful, just because it suggests itself at the
 #   time. Chances are, you won’t use it, or you won’t have
 #   anticipated your future requirements correctly.
+
+
+#                   What to Test in Views
+# class ListViewTest(TestCase):
+#   def test_uses_list_template(self):
+#       response = self.client.get(f'/lists/{list_.id}/')        [1]
+#       self.assertTemplateUsed(response, 'list.html')           [2]
+#   def test_passes_correct_list_to_template(self):
+#       self.assertEqual(response.context['list'], correct_list) [3]
+#   def test_displays_item_form(self):
+#       self.assertIsInstance(response.context['form'],          [4]
+#           ExistingListItemForm)
+#       self.assertContains(response, 'name="text"')
+#   def test_displays_only_items_for_that_list(self):
+#       self.assertContains(response, 'itemey 1')                [5]
+#       self.assertContains(response, 'itemey 2')                [5]
+#       self.assertNotContains(response, 'other list item 1')    [5]
+#   def test_can_save_a_POST_request_to_an_existing_list(self):
+#       self.assertEqual(Item.objects.count(), 1)                [6]
+#       self.assertEqual(new_item.text, 'A new item for an existing
+#           list')                                               [6]
+#   def test_POST_redirects_to_list_view(self):
+#       self.assertRedirects(response, f'/lists/{correct_list.id}/')
+#                                                                [6]
+#   def test_for_invalid_input_nothing_saved_to_db(self):
+#       self.assertEqual(Item.objects.count(), 0)                [6]
+#   def test_for_invalid_input_renders_list_template(self):
+#       self.assertEqual(response.status_code, 200)
+#       self.assertTemplateUsed(response, 'list.html')           [6]
+#   def test_for_invalid_input_passes_form_to_template(self):
+#       self.assertIsInstance(response.context['form'],
+#           ExistingListItemForm)                                [7]
+#   def test_for_invalid_input_shows_error_on_page(self):
+#       self.assertContains(response, escape(EMPTY_ITEM_ERROR))  [7]
+#   def test_duplicate_item_validation_errors_end_up_on_lists_page
+#       (self):
+#       self.assertContains(response, expected_error)
+#       self.assertTemplateUsed(response, 'list.html')
+#       self.assertEqual(Item.objects.all().count(), 1)
+
+# 1. Use the Django Test Client.
+# 2. Check the template used. Then, check each item in the template
+#       context.
+# 3. Check that any objects are the right ones, or querysets have the
+#       correct items.
+# 4. Check that any forms are of the correct class.
+# 5. Think about testing template logic: any for or if might deserve
+#       a minimal test.
+# 6. For POST requests, make sure you test both the valid case and
+#       the invalid case.
+# 7. Optionally, sanity-check that your form is rendered, and its
+#       errors are displayed.
