@@ -28,7 +28,7 @@
 
     <script>
         QUnit.test("errors should be hidden on keypress", function (assert) {
-            initialize();
+            window.Superlists.initialize();
             $('input[name="text"]').trigger('keypress');
             // The jQuery .trigger method is mainly used for testing. 
             // It says “fire off a Jav‐ Script DOM event on the 
@@ -39,7 +39,7 @@
         });
 
         QUnit.test("errors aren't hidden if there is no keypress", function (assert) {
-            initialize();
+            window.Superlists.initialize();
             assert.equal($('.has-error').is(':visible'), true);
         })
     </script>
