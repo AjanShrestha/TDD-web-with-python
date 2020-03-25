@@ -203,3 +203,13 @@ If you find yourself looking at complex views, and having to write a lot of test
 ### Each test should test one thing
 
 The heuristic is to be suspicious if there’s more than one assertion in a test. Sometimes two assertions are closely related, so they belong together. But often your first draft of a test ends up testing multiple behaviours, and it’s worth rewriting it as several tests. Helper functions can keep them from getting too bloated.
+
+## JavaScript Testing in the TDD Cycle
+
+You may be wondering how these JavaScript tests fit in with our “double loop” TDD cycle. The answer is that they play exactly the same role as our Python unit tests.
+
+1. Write an FT and see it fail.
+2. Figure out what kind of code you need next: Python or JavaScript?
+3. Write a unit test in either language, and see it fail.
+4. Write some code in either language, and make the test pass.
+5. Rinse and repeat.
