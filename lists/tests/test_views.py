@@ -231,7 +231,7 @@ class ListViewTest(TestCase):
         expected_error = escape(DUPLICATE_ITEM_ERROR)
         self.assertContains(response, expected_error)
         self.assertTemplateUsed(response, 'list.html')
-        self.assertEqual(Item.objects.all().count, 1)
+        self.assertEqual(Item.objects.all().count(), 1)
 
 
 #                Useful Commands and Concepts
