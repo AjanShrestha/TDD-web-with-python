@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript tests</title>
+    <link rel="stylesheet" href="qunit-2.9.2.css">
+</head>
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+        <form>
+            <input name="text" />
+            <div class="has-error">Error text</div>
+        </form>
+        <!--  jQuery resets the content of the fixtures div before each test -->
+    </div>
+    <form>
+        <input name="text" />
+        <div class="has-error">Error text</div>
+    </form>
+
+    <script src="../jquery-3.4.1.min.js"></script>
+    <script src="../list.js"></script>
+    <script src="qunit-2.9.2.js"></script>
+
+    <script>
+        QUnit.test("errors should be hidden on keypress", function (assert) {
+            window.Superlists.initialize();
+            $('input[name="text"]').trigger('keypress');
+            // The jQuery .trigger method is mainly used for testing. 
+            // It says “fire off a Jav‐ Script DOM event on the 
+            // element(s)”. Here we use the keypress event, which is 
+            // fired off by the browser behind the scenes whenever a 
+            // user types something into a particular input element.
+            assert.equal($('.has-error').is(':visible'), false);
+        });
+
+        QUnit.test("errors aren't hidden if there is no keypress", function (assert) {
+            window.Superlists.initialize();
+            assert.equal($('.has-error').is(':visible'), true);
+        })
+    </script>
+
+</body>
+
+</html>
