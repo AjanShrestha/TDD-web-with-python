@@ -13,7 +13,7 @@ def send_login_email(request):
     uid = str(uuid.uuid4())
     Token.objects.create(email=email, uid=uid)
     print(f"saving uid {uid} for email {email}", file=sys.stderr)
-    url = request.build_absolute_url(f'/accounts/login?uid={uid}')
+    url = request.build_absolute_uri(f'/accounts/login?uid={uid}')
     send_mail(
         'Your loging link for Superlists',
         f'Use this link to log in:\n\n{url}',
