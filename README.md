@@ -32,3 +32,7 @@ Part 2:
 - [chapter_14_simple_form](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_14_simple_form)
 - [chapter_15_advanced_forms](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_15_advanced_forms)
 - [chapter_16_javascript](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_16_javascript)
+
+Part 3:
+
+- [chapter_18_spiking_custom_auth](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_18_spiking_custom_auth)

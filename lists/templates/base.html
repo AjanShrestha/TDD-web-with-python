@@ -12,6 +12,16 @@
 
 <body>
     <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand">Superlists</a>
+                <form action="#" method="POST" class="navbar-form navbar-rightt">
+                    <span>Enter email to log in:</span>
+                    <input type="text" name="email" class="form-control" />
+                    {% csrf_token %}
+                </form>
+            </div>
+        </nav>
         <div class="row">
             <div class="col-md-6 col-md-offset-3 jumbotron">
                 <div class="text-center">
@@ -46,7 +56,7 @@
         // loaded before it tries to do anything. Currently it works 
         // anyway, because we’ve placed the <script> tag right at the 
         // bottom of the page, but we shouldn’t rely on that.
-        $(document).ready(function() {
+        $(document).ready(function () {
             window.Superlists.initialize();
         });
     </script>

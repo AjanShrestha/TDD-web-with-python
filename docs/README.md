@@ -213,3 +213,17 @@ You may be wondering how these JavaScript tests fit in with our “double loop�
 3. Write a unit test in either language, and see it fail.
 4. Write some code in either language, and make the test pass.
 5. Rinse and repeat.
+
+## Exploratory Coding, Spiking, and De-spiking
+
+### Spiking
+
+Exploratory coding to find out about a new API, or to explore the feasibility of a new solution. Spiking can be done without tests. It’s a good idea to do your spike on a new branch, and go back to master when de-spiking.
+
+### De-spiking
+
+Taking the work from a spike and making it part of the production codebase. The idea is to throw away the old spike code altogether, and start again from scratch, using TDD once again. De-spiked code can often come out looking quite different from the original spike, and usually much nicer.
+
+### Writing your FT against spiked code
+
+Whether or not this is a good idea depends on your circumstances. The reason it can be useful is because it can help you write the FT correctly—figuring out how to test your spike can be just as challenging as the spike itself. On the other hand, it might constrain you towards reimplementing a very similar solution to your spiked one—something to watch out for.
