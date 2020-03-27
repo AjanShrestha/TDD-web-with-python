@@ -53,3 +53,17 @@ class SendLoginEmailViewTest(TestCase):
         # 5. ...and we can also unpack its various positional and
         #   keyword call arguments, and examine what it was called
         #   with.
+
+    def test_adds_success_message(self):
+        response = self.client.post(
+            '/accounts/send_login_email',
+            data={'email': 'edith@example.com'},
+            follow=True
+        )
+
+        message = list(response.context['messages'])[0]
+        self.assertEqual(
+            message.message,
+            "Check your email, we've sent you a link yo can use to log in."
+        )
+        self.assertEqual(message.tags, "success")
