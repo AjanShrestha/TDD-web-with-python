@@ -90,13 +90,13 @@ class SendLoginEmailViewTest(TestCase):
         self.assertIn(expected_url, body)
 
 
+@patch('accounts.views.auth')  # 1
 class LoginViewTest(TestCase):
 
-    def test_redirects_to_home_page(self):
+    def test_redirects_to_home_page(self, mock_auth):  # 2
         response = self.client.get('/accounts/login?token=abcd123')
         self.assertRedirects(response, '/')
 
-    @patch('accounts.views.auth')  # 1
     # 2
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         self.client.get('/accounts/login?token=abcd123')
@@ -127,8 +127,7 @@ class LoginViewTest(TestCase):
         #   have been called with-- that is, the token from the GET
         #   request.
 
-    @patch('accounts.views.auth')  # 1
-    def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
+    def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):  # 3
         response = self.client.get('/accounts/login?token=abcd123')
         self.assertEqual(
             mock_auth.login.call_args,  # 2
@@ -148,6 +147,20 @@ class LoginViewTest(TestCase):
         #   authenticate function returns. Because authenticate is
         #   also mocked out, we can use its special “return_value”
         #   attribute.
+
+    def test_does_not_login_if_user_is_not_authenticated(self, mock_auth):
+        mock_auth.authenticate.return_value = None  # 4
+        self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(mock_auth.login.called, False)  # 5
+
+    # 1. We move the patch to the class level...
+    # 2. which means we get an extra argument injected into our first
+    #   test method...
+    # 3. And we can remove the decorators from all the other tests.
+    # 4. In our new test, we explicitly set the return_value on the
+    #   auth.authenticate mock, before we call the self.client.get.
+    # 5. We assert that, if authenticate returns None, we should not
+    #   call auth.login at all.
 
 
 #   Mocks Can Leave You Tightly Coupled to the Implementation
