@@ -32,4 +32,5 @@ def send_login_email(request):
 
 
 def login(request):
+    auth.authenticate('bang!')
     return redirect('/')
