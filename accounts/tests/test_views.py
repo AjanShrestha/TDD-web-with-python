@@ -145,3 +145,8 @@ class LoginViewTest(TestCase):
 # better to test behaviour, not implementation details test what
 # happens, not how you do it. Mocks often end up erring too much on
 # the side of the “how” rather than the “what”.
+
+#   An Alternative Reason to Use Mocks: Reducing Duplication
+# One good justification for using mocks is when they will reduce
+# duplication between tests. It’s one way of avoiding combinatorial
+# explosion.
