@@ -227,3 +227,29 @@ Taking the work from a spike and making it part of the production codebase. The 
 ### Writing your FT against spiked code
 
 Whether or not this is a good idea depends on your circumstances. The reason it can be useful is because it can help you write the FT correctly—figuring out how to test your spike can be just as challenging as the spike itself. On the other hand, it might constrain you towards reimplementing a very similar solution to your spiked one—something to watch out for.
+
+## On Mocking in Python
+
+### Mocking and external dependencies
+
+We use mocking in unit tests when we have an external dependency that we don’t want to actually use in our tests. A mock is used to simulate the third-party API. Whilst it is possible to “roll your own” mocks in Python, a mocking framework like the mock module provides a lot of helpful shortcuts which will make it easier to write (and more importantly, read) your tests.
+
+### Monkeypatching
+
+Replacing an object in a namespace at runtime. We use it in our unit tests to replace a real function which has undesirable side effects with a mock object, using the patch decorator.
+
+### The Mock library
+
+Michael Foord (who used to work for the company that spawned PythonAny‐ where, just before I joined) wrote the excellent “Mock” library that’s now been integrated into the standard library of Python 3. It contains most everything you might need for mocking in Python.
+
+### The patch decorator
+
+unittest.mock provides a function called patch, which can be used to “mock out” any object from the module you’re testing. It’s commonly used as a decorator on a test method, or even at the class level, where it’s applied to all the test methods of that class.
+
+### Mocks can leave you tightly coupled to the implementation
+
+Mocks can leave you tightly coupled to your implementation. For that reason, you shouldn’t use them unless you have a good reason.
+
+### Mocks can save you from duplication in your tests
+
+On the other hand, there’s no point in duplicating all of your tests for a function inside a higher-level piece of code that uses that function. Using a mock in this case reduces duplication.
