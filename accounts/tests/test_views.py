@@ -127,6 +127,28 @@ class LoginViewTest(TestCase):
         #   have been called with-- that is, the token from the GET
         #   request.
 
+    @patch('accounts.views.auth')  # 1
+    def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
+        response = self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(
+            mock_auth.login.call_args,  # 2
+            call(
+                response.wsgi_request,
+                mock_auth.authenticate.return_value
+            )  # 3
+        )
+
+        # 1. We mock the contrib.auth module again.
+
+        # 2. This time we examine the call args for the auth.login
+        #   function.
+
+        # 3. We check that it’s called with the request object that
+        #   the view sees, and the “user” object that the
+        #   authenticate function returns. Because authenticate is
+        #   also mocked out, we can use its special “return_value”
+        #   attribute.
+
 
 #   Mocks Can Leave You Tightly Coupled to the Implementation
 # This sidebar is an intermediate-level testing tip. If it goes over
