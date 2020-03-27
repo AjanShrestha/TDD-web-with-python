@@ -70,6 +70,13 @@ class SendLoginEmailViewTest(TestCase):
         self.assertEqual(message.tags, "success")
 
 
+class LoginViewTest(TestCase):
+
+    def test_redirects_to_home_page(self):
+        response = self.client.get('/accounts/login?token=abcd123')
+        self.assertRedirects(response, '/')
+
+
 #   Mocks Can Leave You Tightly Coupled to the Implementation
 # This sidebar is an intermediate-level testing tip. If it goes over
 # your head the first time around, come back and take another look
