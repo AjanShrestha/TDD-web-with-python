@@ -3,6 +3,7 @@ from django.test import TestCase
 from unittest.mock import patch
 
 import accounts.views
+from accounts.models import Token
 
 
 class SendLoginEmailViewTest(TestCase):
@@ -13,6 +14,20 @@ class SendLoginEmailViewTest(TestCase):
             data={'email': 'edith@example.com'}
         )
         self.assertRedirects(response, '/')
+
+    def test_adds_success_message(self):
+        response = self.client.post(
+            '/accounts/send_login_email',
+            data={'email': 'edith@example.com'},
+            follow=True
+        )
+
+        message = list(response.context['messages'])[0]
+        self.assertEqual(
+            message.message,
+            "Check your email, we've sent you a link you can use to log in."
+        )
+        self.assertEqual(message.tags, "success")
 
     @patch('accounts.views.send_mail')  # 1
     def test_sends_email_to_address_from_post(self, mock_send_mail):  # 2
@@ -55,19 +70,24 @@ class SendLoginEmailViewTest(TestCase):
         #   keyword call arguments, and examine what it was called
         #   with.
 
-    def test_adds_success_message(self):
-        response = self.client.post(
+    def test_creates_token_associated_with_email(self):
+        self.client.post(
             '/accounts/send_login_email',
-            data={'email': 'edith@example.com'},
-            follow=True
+            data={'email': 'edith@example.com'}
         )
+        token = Token.objects.first()
+        self.assertEqual(token.email, 'edith@example.com')
 
-        message = list(response.context['messages'])[0]
-        self.assertEqual(
-            message.message,
-            "Check your email, we've sent you a link you can use to log in."
+    @patch('accounts.views.send_mail')
+    def test_sends_link_to_login_using_token_uid(self, mock_send_mail):
+        self.client.post(
+            '/accounts/send_login_email',
+            data={'email': 'edith@example.com'}
         )
-        self.assertEqual(message.tags, "success")
+        token = Token.objects.first()
+        expected_url = f'http://testserver/accounts/login?token={token.id}'
+        (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
+        self.assertIn(expected_url, body)
 
 
 class LoginViewTest(TestCase):
