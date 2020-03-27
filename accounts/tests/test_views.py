@@ -1,3 +1,4 @@
+from unittest.mock import patch, call[...]
 from django.test import TestCase
 from unittest.mock import patch
 
@@ -67,3 +68,53 @@ class SendLoginEmailViewTest(TestCase):
             "Check your email, we've sent you a link yo can use to log in."
         )
         self.assertEqual(message.tags, "success")
+
+
+#   Mocks Can Leave You Tightly Coupled to the Implementation
+# This sidebar is an intermediate-level testing tip. If it goes over
+# your head the first time around, come back and take another look
+# when you’ve finished this chapter and Chapter 23.
+
+# I said testing messages is a bit contorted; it took me several goes
+# to get it right. In fact, at work, we gave up on testing them like
+# this and decided to just use mocks. Let’s see what that would look
+# like in this case:
+
+# accounts/tests/test_views.py
+# @patch('accounts.views.messages')
+# def test_adds_success_message_with_mocks(self, mock_messages):
+#     response = self.client.post(
+#         '/accounts/send_login_email',
+#         data={'email': 'edith@example.com'}
+#     )
+#     expected = "Check your email, we've sent you a link you can use to log in."
+#     self.assertEqual(
+#         mock_messages.success.call_args,
+#         call(response.wsgi_request, expected),
+#     )
+
+# We mock out the messages module, and check that messages.success
+# was called with the right args: the original request, and the
+# message we want.
+# And you could get it passing by using the exact same code as
+# earlier. Here’s the problem though: the messages framework gives
+# you more than one way to achieve the same result. I could write the
+# code like this:
+
+    # messages.add_message(
+    #     request,
+    #     messages.SUCCESS,
+    #     "Check your email, we've sent you a link you can use to log in."
+    # )
+
+# And the original, nonmocky test would still pass. But our mocky
+# test will fail, because we’re no longer calling messages.success,
+# we’re calling messages.add_message. Even though the end result is
+# the same and our code is “correct, ” the test is broken.
+
+# **
+# This is what people mean when they say that using mocks can leave
+# you “tightly coupled with the implementation”. We usually say it’s
+# better to test behaviour, not implementation details test what
+# happens, not how you do it. Mocks often end up erring too much on
+# the side of the “how” rather than the “what”.
