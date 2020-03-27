@@ -181,3 +181,39 @@ class LoginViewTest(TestCase):
 # One good justification for using mocks is when they will reduce
 # duplication between tests. It’s one way of avoiding combinatorial
 # explosion.
+
+
+#               On Mock call_args
+# The call_args property on a mock represents the positional and
+# keyword arguments that the mock was called with. It’s a special
+# “call” object type, which is essentially a tuple of
+# (positional_args, keyword_args). positional_args is itself a tuple,
+# consisting of the set of positional arguments. keyword_args is a
+# dictionary.
+
+# >>> from unittest.mock import Mock, call
+# >>> m = Mock()
+# >>> m(42, 43, 'positional arg 3', key='val', thing=666)
+#   <Mock name='mock()' id='139909729163528'>
+# >>> m.call_args
+#   call(42, 43, 'positional arg 3', key='val', thing=666)
+# >>> m.call_args == ((42, 43, 'positional arg 3'), {'key': 'val',
+# 'thing': 666})
+#   True
+# >>> m.call_args == call(42, 43, 'positional arg 3', key='val',
+# thing=666)
+#   True
+
+# So in our test, we could have done this instead:
+
+    # self.assertEqual(
+    #     mock_auth.authenticate.call_args,
+    #     ((,), {'uid': 'abcd123'})
+    # )
+
+# or this
+    # args, kwargs = mock_auth.authenticate.call_args
+    # self.assertEqual(args, (,))
+    # self.assertEqual(kwargs, {'uid': 'abcd123')
+
+# But you can see how using the call helper is nicer.
