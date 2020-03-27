@@ -96,7 +96,7 @@ class LoginViewTest(TestCase):
         response = self.client.get('/accounts/login?token=abcd123')
         self.assertRedirects(response, '/')
 
-    @patch('accounts.view.auth')  # 1
+    @patch('accounts.views.auth')  # 1
     # 2
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         self.client.get('/accounts/login?token=abcd123')
