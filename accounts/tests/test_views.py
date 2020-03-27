@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, call
 from django.test import TestCase
 from unittest.mock import patch
 
@@ -95,6 +95,37 @@ class LoginViewTest(TestCase):
     def test_redirects_to_home_page(self):
         response = self.client.get('/accounts/login?token=abcd123')
         self.assertRedirects(response, '/')
+
+    @patch('accounts.view.auth')  # 1
+    # 2
+    def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
+        self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(
+            mock_auth.authenticate.call_args,  # 3
+            call(uid='abcd123')  # 4
+        )
+
+        # 1. We expect to be using the django.contrib.auth module in
+        #   views.py, and we mock it out here. Note that this time,
+        #   we’re not mocking out a function, we’re mocking out a
+        #   whole module, and thus implicitly mocking out all the
+        #   functions (and any other objects) that module contains.
+
+        # 2. As usual, the mocked object is injected into our test
+        #   method.
+
+        # 3. This time, we’ve mocked out a module rather than a
+        #   function. So we examine the call_args not of the
+        #   mock_auth module, but of the mock_auth.authenticate
+        #   function. Because all the attributes of a mock are more
+        #   mocks, that’s a mock too. You can start to see why Mock
+        #   objects are so convenient, compared to trying to build
+        #   your own.
+
+        # 4. Now, instead of “unpacking” the call args, we use the
+        #   call function for a neater way of saying what it should
+        #   have been called with-- that is, the token from the GET
+        #   request.
 
 
 #   Mocks Can Leave You Tightly Coupled to the Implementation
