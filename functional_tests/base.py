@@ -21,6 +21,33 @@ import time
 MAX_WAIT = 10
 
 
+def wait(fn):  # 1
+    def modified_fn(*args, **kwargs):  # 3 # 6
+        start_time = time.time()
+        while True:  # 4
+            try:
+                return fn(*args, **kwargs)  # 5 # 7
+            except (AssertionError, WebDriverException) as e:  # 4
+                if (time.time() - start_time) > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+    return modified_fn  # 2
+    # 1. A decorator is a way of modifying a function; it takes a
+    #   function as an argument...
+    # 2. and returns another function as the modified (or “decorated”
+    #   ) version.
+    # 3. Here’s where we create our modified function.
+    # 4. And here’s our familiar loop, which will keep going,
+    #   catching the usual exceptions, until our timeout expires.
+    # 5. And as always, we call our function and return immediately
+    #   if there are no exceptions.
+    # 6. Using *args and **kwargs, we specify that modified_fn may
+    #   take any arbitrary positional and keyword arguments.
+    # 7. As we’ve captured them in the function definition, we make
+    #   sure to pass those same arguments to fn when we actually call
+    #   it.
+
+
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -33,40 +60,30 @@ class FunctionalTest(StaticLiveServerTestCase):
         # inside setUp
         self.browser.quit()
 
+    @wait
     def wait_for_row_in_list_table(self, row_text):
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element_by_id('id_list_table')
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
+    @wait
     def wait_for(self, fn):
-        start_time = time.time()
-        while True:
-            try:
-                return fn()
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
-        # The body of our try/except, instead of being the specific
-        # code for examining table rows, just becomes a call to the
-        # function we passed in. We also return its return value to
-        # be able to exit the loop immediately if no exception is
-        # raised.
-        # In our case, we’re using it (lambda) to transform a bit of
-        # code that would otherwise be executed immediately into a
-        # function that we can pass as an argument, and that can be
-        # executed later, and multiple times
+        return fn()
 
     def get_item_input_box(self):
         return self.browser.find_element_by_id('id_text')
+
+    @wait
+    def wait_to_be_logged_in(self, email):
+        self.browser.find_element_by_link_text('Log out')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertIn(email, navbar.text)
+
+    @wait
+    def wait_to_be_logged_out(self, email):
+        self.browser.find_element_by_name('email')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertNotIn(email, navbar.text)
 
 
 # First functional test (FT)
