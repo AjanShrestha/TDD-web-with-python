@@ -22,11 +22,11 @@ MAX_WAIT = 10
 
 
 def wait(fn):  # 1
-    def modified_fn():  # 3
+    def modified_fn(*args, **kwargs):  # 3 # 6
         start_time = time.time()
         while True:  # 4
             try:
-                return fn()  # 5
+                return fn(*args, **kwargs)  # 5 # 7
             except (AssertionError, WebDriverException) as e:  # 4
                 if (time.time() - start_time) > MAX_WAIT:
                     raise e
@@ -41,6 +41,11 @@ def wait(fn):  # 1
     #   catching the usual exceptions, until our timeout expires.
     # 5. And as always, we call our function and return immediately
     #   if there are no exceptions.
+    # 6. Using *args and **kwargs, we specify that modified_fn may
+    #   take any arbitrary positional and keyword arguments.
+    # 7. As we’ve captured them in the function definition, we make
+    #   sure to pass those same arguments to fn when we actually call
+    #   it.
 
 
 class FunctionalTest(StaticLiveServerTestCase):
