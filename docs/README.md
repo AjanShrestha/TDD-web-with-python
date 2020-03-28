@@ -253,3 +253,30 @@ Mocks can leave you tightly coupled to your implementation. For that reason, you
 ### Mocks can save you from duplication in your tests
 
 On the other hand, there’s no point in duplicating all of your tests for a function inside a higher-level piece of code that uses that function. Using a mock in this case reduces duplication.
+
+## Django Sessions: How a User's Cookies Tell the Server She is Authenticated
+
+Because HTTP is stateless, servers need a way of recognising different clients with every _single request_. IP addresses can be shared, so the usual solution is to give each client a unique session ID, which it will store in a cookie, and submit with every request. The server will store that ID somewhere (by default, in the database), and then it can recognise each request that comes in as being from a particular client.
+If you log in to the site using the dev server, you can actually take a look at your session ID by hand if you like. It’s stored under the key sessionid by default. See Figure 20-1.
+
+![Examining the session cookie in the Debug toolbar](./20.1.png)
+
+These session cookies are set for all visitors to a Django site, whether they’re logged in or not.
+
+When we want to recognise a client as being a logged-in and authenticated user, again, rather asking the client to send their username and password with every single request, the server can actually just mark that client’s session as being an authenticated session, and associate it with a user ID in its database.
+
+A session is a dictionary-like data structure, and the user ID is stored under the key given by django.contrib.auth.SESSION_KEY. You can check this out in a ./manage.py shell if you like:
+
+    $ python manage.py shell
+    [...]
+    In [1]: from django.contrib.sessions.models import Session
+
+    # substitute your session id from your browser cookie here
+    In [2]: session = Session.objects.get(
+      session_key="8u0pygdy9blo696g3n4o078ygt6l8y0y"
+    )
+
+    In [3]: print(session.get_decoded())
+    {'\_auth_user_id': 'obeythetestinggoat@gmail.com', '\_auth_user_backend': 'accounts.authentication.PasswordlessAuthenticationBackend'}
+
+You can also store any other information you like on a user’s session, as a way of tem‐ porarily keeping track of some state. This works for non–logged-in users too. Just use request.session inside any view, and it works as a dict.
