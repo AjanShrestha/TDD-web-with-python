@@ -66,24 +66,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
+    @wait
     def wait_for(self, fn):
-        start_time = time.time()
-        while True:
-            try:
-                return fn()
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
-        # The body of our try/except, instead of being the specific
-        # code for examining table rows, just becomes a call to the
-        # function we passed in. We also return its return value to
-        # be able to exit the loop immediately if no exception is
-        # raised.
-        # In our case, we’re using it (lambda) to transform a bit of
-        # code that would otherwise be executed immediately into a
-        # function that we can pass as an argument, and that can be
-        # executed later, and multiple times
+        return fn()
 
     def get_item_input_box(self):
         return self.browser.find_element_by_id('id_text')
