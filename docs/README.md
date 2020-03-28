@@ -280,3 +280,21 @@ A session is a dictionary-like data structure, and the user ID is stored under t
     {'\_auth_user_id': 'obeythetestinggoat@gmail.com', '\_auth_user_backend': 'accounts.authentication.PasswordlessAuthenticationBackend'}
 
 You can also store any other information you like on a user’s session, as a way of tem‐ porarily keeping track of some state. This works for non–logged-in users too. Just use request.session inside any view, and it works as a dict.
+
+## Lessons Learned
+
+### Decorators are nice
+
+Decorators can be a great way of abstracting out different levels of concerns. They let us write our test assertions without having to think about waits at the same time.
+
+### De-duplicate your FTs, with caution
+
+Every single FT doesn’t need to test every single part of your application. In our case, we wanted to avoid going through the full login process for every FT that needs an authenticated user, so we used a test fixture to “cheat” and skip that part. You might find other things you want to skip in your FTs. A word of caution, however: functional tests are there to catch unpredictable interactions between different parts of your application, so be wary of pushing de-duplication to the extreme.
+
+### Test fixtures
+
+Test fixtures refers to test data that needs to be set up as a precondition before a test is run—often this means populating the database with some information, but as we’ve seen (with browser cookies), it can involve other types of preconditions.
+
+### Avoid JSON fixtures
+
+Django makes it easy to save and restore data from the database in JSON format (and others) using the dumpdata and loaddata management commands. Most people recommend against using these for test fixtures, as they are painful to manage when your database schema changes. Use the ORM, or a tool like [factory_boy](https://factoryboy.readthedocs.org/).
