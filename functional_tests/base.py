@@ -21,6 +21,28 @@ import time
 MAX_WAIT = 10
 
 
+def wait(fn):  # 1
+    def modified_fn():  # 3
+        start_time = time.time()
+        while True:  # 4
+            try:
+                return fn()  # 5
+            except (AssertionError, WebDriverException) as e:  # 4
+                if (time.time() - start_time) > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+    return modified_fn  # 2
+    # 1. A decorator is a way of modifying a function; it takes a
+    #   function as an argument...
+    # 2. and returns another function as the modified (or “decorated”
+    #   ) version.
+    # 3. Here’s where we create our modified function.
+    # 4. And here’s our familiar loop, which will keep going,
+    #   catching the usual exceptions, until our timeout expires.
+    # 5. And as always, we call our function and return immediately
+    #   if there are no exceptions.
+
+
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
