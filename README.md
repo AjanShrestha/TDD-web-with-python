@@ -37,3 +37,4 @@ Part 3:
 
 - [chapter_18_spiking_custom_auth](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_18_spiking_custom_auth)
 - [chapter_19_mocking](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_19_mocking)
+- [chapter_20_fixtures_and_wait_decorator](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_20_fixtures_and_wait_decorator)
