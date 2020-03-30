@@ -15,7 +15,7 @@ def reset_database(host):
 def create_session_on_server(host, email):
     manage_dot_py = _get_manage_dot_py(host)
     with settings(host_string=f'aj@{host}'):  # 1
-        session_key = run(f'{manage_dot_py} create_cession {email}')  # 2
+        session_key = run(f'{manage_dot_py} create_session {email}')  # 2
         return session_key
 
 # 1. Here’s the context manager that sets the host string, in the
