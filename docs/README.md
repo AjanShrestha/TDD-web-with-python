@@ -298,3 +298,17 @@ Test fixtures refers to test data that needs to be set up as a precondition befo
 ### Avoid JSON fixtures
 
 Django makes it easy to save and restore data from the database in JSON format (and others) using the dumpdata and loaddata management commands. Most people recommend against using these for test fixtures, as they are painful to manage when your database schema changes. Use the ORM, or a tool like [factory_boy](https://factoryboy.readthedocs.org/).
+
+## Recap: Creating Session Locally Versus Staging
+
+![Creating Session Locally Versus Staging](./localStagingSession.png)
+
+I’ve shown one way of managing the test database, but you could experiment with others—for example, if you were using MySQL or Postgres, you could open up an SSH tunnel to the server, and use port forwarding to talk to the database directly. You could then amend settings.DATABASES during FTs to talk to the tunnelled port.
+
+## Warning: Be Careful Not to Run Test Code Against the Live Server
+
+We’re into dangerous territory, now that we have code that can directly affect a database on the server. You want to be very, very careful that you don’t accidentally blow away your production database by running FTs against the wrong host.
+
+You might consider putting some safeguards in place at this point. For example, you could put staging and production on different servers, and make it so they use different keypairs for authentication, with different passphrases.
+
+This is similarly dangerous territory to running tests against clones of production data.
