@@ -68,12 +68,12 @@ class GmailInbox:
     def user(self, email):
         self._email = email
 
-    def stat(self):
+    def count(self):
         try:
             all_messages = self._service.users().messages().list(
                 userId=self._user_id).execute()['messages']
             self._messages = all_messages['messages']
-            return len(self._messages), _
+            return len(self._messages)
         except Exception as error:
             print('An error occurred: %s' % error)
 
@@ -117,7 +117,7 @@ class LoginTest(FunctionalTest):
             inbox.user(test_email)
             while time.time() - start < 60:
                 # get 10 newest messages
-                count, _ = inbox.stat()
+                count = inbox.count()
                 for i in reversed(range(max(0, count - 10), count)):
                     print('getting msg', i)
                     msg_id = inbox.retr(i)
