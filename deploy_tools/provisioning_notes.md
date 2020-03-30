@@ -21,6 +21,7 @@ eg, on Ubuntu:
 
 - see gunicorn-system.template.service
 - replace SITENAME with, e.g, staging.my-domain.com
+- replace SEKRIT with email password
 
 ## Folder structure:
 

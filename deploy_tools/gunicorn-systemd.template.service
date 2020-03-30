@@ -5,8 +5,11 @@ Description=Gunicorn server for SITENAME
 Restart=on-failure
 User=aj
 WorkingDirectory=/home/aj/sites/SITENAME/source
+Environment="EMAIL_PASSWORD=SEKRIT"
 ExecStart=/home/aj/sites/SITENAME/virtualenv/bin/gunicorn \
     --bind unix:/tmp/SITENAME.socket \
+    --access-logfile ../access.log \
+    --error-logfile ../error.log \
     superlists.wsgi:application
 
 [Install]
