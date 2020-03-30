@@ -73,7 +73,7 @@ class GmailInbox:
             all_messages = self._service.users().messages().list(
                 userId=self._user_id).execute()['messages']
             self._messages = all_messages['messages']
-            return len(self._messages), self._messages
+            return len(self._messages), _
         except Exception as error:
             print('An error occurred: %s' % error)
 
