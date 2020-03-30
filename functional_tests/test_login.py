@@ -97,6 +97,9 @@ class GmailInbox:
         except errors.HttpError as error:
             print('An error occurred: %s' % error)
 
+    def quit(self):
+        print('GC please collect me.')
+
 
 class LoginTest(FunctionalTest):
 
