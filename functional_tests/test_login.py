@@ -71,7 +71,7 @@ class GmailInbox:
     def count(self):
         try:
             all_messages = self._service.users().messages().list(
-                userId=self._user_id).execute()['messages']
+                userId=self._user_id).execute()
             self._messages = all_messages['messages']
             return len(self._messages)
         except Exception as error:
@@ -117,8 +117,7 @@ class LoginTest(FunctionalTest):
             inbox.user(test_email)
             while time.time() - start < 60:
                 # get 10 newest messages
-                count = inbox.count()
-                for i in reversed(range(max(0, count - 10), count)):
+                for i in range(max(inbox.count(), 10)):
                     print('getting msg', i)
                     msg_id = inbox.retr(i)
                     email_props = inbox.props(msg_id)

@@ -140,5 +140,6 @@ geckodriver.log
 functional_tests/screendumps
 functional_tests/credentials.json
 functional_tests/token.pickle
+functional_tests/quickstart.py
 
 .token
