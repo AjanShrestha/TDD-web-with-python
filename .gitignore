@@ -138,5 +138,7 @@ geckodriver.log
 
 # Custom Testing
 functional_tests/screendumps
+functional_tests/credentials.json
+functional_tests/token.pickle
 
 .token
