@@ -145,7 +145,7 @@ class NewListViewUnitTest(unittest.TestCase):  # 1
 
     def test_passess_POST_data_to_NewListForm(self, mockNewListForm):
         new_list2(self.request)
-        mockNewListForm.assert_called_once_wih(data=self.request.POST)  # 4
+        mockNewListForm.assert_called_once_with(data=self.request.POST)  # 4
 
     # 1. The Django TestCase class makes it too easy to write
     #   integrated tests. As a way of making sure we’re writing “pure”
