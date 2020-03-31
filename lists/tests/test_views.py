@@ -154,6 +154,29 @@ class NewListViewUnitTest(unittest.TestCase):
         new_list2(self.request)
         mock_form.save.assert_called_once_with(owner=self.request.user)
 
+    @patch('lists.views.redirect')  # 1
+    # 2
+    def test_redirects_to_form_returned_object_if_form_valid(self, mock_redirect, mockNewListForm):
+        mock_form = mockNewListForm.return_value
+        mock_form.is_valid.return_value = True  # 3
+
+        response = new_list2(self.request)
+
+        self.assertEqual(response, mock_redirect.return_value)  # 4
+        mock_redirect.assert_called_once_with(mock_form.save.return_value)  # 5
+
+        # 1. We mock out the redirect function, this time at the
+        #   method level.
+        # 2. patch decorators are applied innermost first, so the new
+        #   mock is injected to our method as before the
+        #   mockNewListForm.
+        # 3. We specify that we’re testing the case where the form is
+        #   valid.
+        # 4. We check that the response from the view is the result
+        #   of the redirect function.
+        # 5. And we check that the redirect function was called with
+        #   the object that the form returns on save.
+
 
 class ListViewTest(TestCase):
 
