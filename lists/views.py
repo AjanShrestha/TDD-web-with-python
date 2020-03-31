@@ -79,3 +79,28 @@ def my_lists(request, email):
 #    (list_id),
 # * pass it to a form for validation and possible saving, and
 # * then redirect or render a template.
+
+
+#   A Decision Point: Whether to Proceed to the Next Layer with a Failing Test
+
+# In order to get this test passing, as it’s written now, we have to
+# move down to the model layer. However, it means doing more work
+# with a failing test, which is not ideal.
+
+# The alternative is to rewrite the test to make it more isolated
+# from the level below, using mocks.
+
+# On the one hand, it’s a lot more effort to use mocks, and it can
+# lead to tests that are harder to read. On the other hand, imagine
+# if our app was more complex, and there were several more layers
+# between the outside and the inside. Imagine leaving three or four
+# or five layers of tests, all failing while we wait to get to the
+# bottom layer to imple‐ ment our critical feature. While tests are
+# failing, we’re not sure that layer really works, on its own terms,
+# or not. We have to wait until we get to the bottom layer.
+
+# This is a decision point you’re likely to run into in your own
+# projects. Let’s investigate both approaches. We’ll start by taking
+# the shortcut, and leaving the test failing. In the next chapter,
+# we’ll come back to this exact point, and investigate how things
+# would have gone if we’d used more isolation.
