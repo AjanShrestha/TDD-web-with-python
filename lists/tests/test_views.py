@@ -61,18 +61,20 @@
 #   like that much more effort, and you’re tempted each time to put
 #   it off a little longer, and pretty soon—frog soup!
 
+from lists.views import home_page
+from lists.models import Item, List
+from lists.forms import (
+    DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
+    ExistingListItemForm, ItemForm
+)
+from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
 
-from lists.forms import (
-    DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
-    ExistingListItemForm, ItemForm
-)
-from lists.models import Item, List
-from lists.views import home_page
+User = get_user_model()
 
 
 class HomePageTest(TestCase):
@@ -239,6 +241,12 @@ class MyListsTest(TestCase):
     def test_my_lists_url_renders_my_lists_template(self):
         response = self.client.get('/lists/users/a@b.com/')
         self.assertTemplateUsed(response, 'my_lists.html')
+
+    def test_passes_correct_owner_to_template(self):
+        User.objects.create(email='wrong@owner.com')
+        correct_user = User.objects.create(email='a@b.com')
+        response = self.client.get('/lists/users/a@b.com/')
+        self.assertEqual(response.context['owner'], correct_user)
 
 
 #                Useful Commands and Concepts
