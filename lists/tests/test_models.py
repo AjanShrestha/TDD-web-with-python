@@ -61,10 +61,13 @@
 #   like that much more effort, and you’re tempted each time to put
 #   it off a little longer, and pretty soon—frog soup!
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from lists.models import Item, List
+
+User = get_user_model()
 
 
 class ItemModelTest(TestCase):
@@ -120,6 +123,20 @@ class ListModelTest(TestCase):
     def test_get_absolute_url(self):
         list_ = List.objects.create()
         self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
+
+    def test_lists_can_have_owners(self):
+        user = User.objects.create(email='a@b.com')
+        list_ = List.objects.create(owner=user)
+        self.assertIn(list_, user.list_set.all())
+
+    def test_list_owner_is_optional(self):
+        List.objects.create()  # should not raise
+
+    def test_list_name_is_first_item_text(self):
+        list_ = List.objects.create()
+        Item.objects.create(list=list_, text='first item')
+        Item.objects.create(list=list_, text='second item')
+        self.assertEqual(list_.name, 'first item')
 
 
 #                Useful Commands and Concepts
