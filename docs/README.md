@@ -346,3 +346,5 @@ We might have ideas in our head about the new desired behaviour of our inner lay
 One problem that can result is to build inner components that are more general or more capable than we actually need, which is a waste of time, and an added source of complexity for your project. Another common problem is that you create inner components with an API which is convenient for their own internal design, but which later turns out to be inappropriate for the calls your outer layers would like to make... worse still, you might end up with inner components which, you later realise, don’t actually solve the problem that your outer layers need solved.
 
 In contrast, working outside-in allows you to use each layer to imagine the most convenient API you could want from the layer beneath it.
+
+> Outside-In TDD is sometimes called “programming by wishful thinking”, and you can see why. We start writing code at the higher levels based on what we wish we had at the lower levels, even though it doesn’t exist yet!
