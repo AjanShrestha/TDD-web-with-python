@@ -65,6 +65,10 @@ def view_list(request, list_id):
     )
 
 
+def my_lists(request, email):
+    return render(request, 'my_lists.html')
+
+
 # Our two views are now looking very much like “normal” Django views:
 # * they take information from a user’s request,
 # * combine it with some custom logic or information from the URL
