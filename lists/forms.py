@@ -34,6 +34,10 @@ class ItemForm(forms.models.ModelForm):
         # object that is being modi‐ fied or created.
 
 
+class NewListForm(object):
+    pass
+
+
 class ExistingListItemForm(ItemForm):
     def __init__(self, for_list, *args, **kwargs):
         super().__init__(*args, **kwargs)
