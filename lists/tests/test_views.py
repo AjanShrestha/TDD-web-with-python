@@ -66,7 +66,7 @@ from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 import unittest
 
 from lists.forms import (
@@ -136,29 +136,23 @@ class NewListViewIntegratedTest(TestCase):
         self.assertEqual(list_.owner, user)
 
 
-@patch('lists.views.NewListForm')  # 2
-class NewListViewUnitTest(unittest.TestCase):  # 1
+@patch('lists.views.NewListForm')
+class NewListViewUnitTest(unittest.TestCase):
 
     def setUp(self):
         self.request = HttpRequest()
-        self.request.POST['text'] = 'new list item'  # 3
+        self.request.POST['text'] = 'new list item'
+        self.request.user = Mock()
 
     def test_passess_POST_data_to_NewListForm(self, mockNewListForm):
         new_list2(self.request)
-        mockNewListForm.assert_called_once_with(data=self.request.POST)  # 4
+        mockNewListForm.assert_called_once_with(data=self.request.POST)
 
-    # 1. The Django TestCase class makes it too easy to write
-    #   integrated tests. As a way of making sure we’re writing “pure”
-    #   , isolated unit tests, we’ll only use unittest.TestCase.
-    # 2. We mock out the NewListForm class (which doesn’t even exist
-    #   yet). It’s going to be used in all the tests, so we mock it
-    #   out at the class level.
-    # 3. We set up a basic POST request in setUp, building up the
-    #   request by hand rather than using the (overly integrated)
-    #   Django Test Client.
-    # 4. And we check the first thing about our new view: it
-    #   initialises its collaborator, the NewListForm, with the
-    #   correct constructor—the data from the request.
+    def test_saves_form_with_owner_if_form_valid(self, mockNewListForm):
+        mock_form = mockNewListForm.return_value
+        mock_form.is_valid.return_value = True
+        new_list2(self.request)
+        mock_form.save.assert_called_once_with(owner=self.request.user)
 
 
 class ListViewTest(TestCase):
