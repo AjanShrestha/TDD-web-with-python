@@ -67,7 +67,7 @@ from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
-from unittest.mock import patch
+import unittest
 
 from lists.views import home_page
 from lists.models import Item, List
@@ -95,7 +95,7 @@ class HomePageTest(TestCase):
         self.assertIsInstance(response.context['form'], ItemForm)
 
 
-class NewListTest(TestCase):
+class NewListViewIntegratedTest(TestCase):
 
     def test_can_save_a_POST_request(self):
         self.client.post('/lists/new', data={'text': 'A new list item'})
@@ -127,49 +127,13 @@ class NewListTest(TestCase):
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
 
-    @patch('lists.views.List')
-    @patch('lists.views.ItemForm')
-    def test_list_owner_is_saved_if_user_is_authenticated(
-        self,
-        mockItemFormClass,
-        mockListClass
-    ):
+    @unittest.skip
+    def test_list_owner_is_saved_if_user_is_authenticated(self):
         user = User.objects.create(email='a@b.com')
         self.client.force_login(user)
-        mock_list = mockListClass.return_value
-
-        def check_owner_assigned():  # 1
-            self.assertEqual(mock_list.owner, user)
-        mock_list.save.side_effect = check_owner_assigned  # 2
-
         self.client.post('/lists/new', data={'text': 'new item'})
-
-        mock_list.save.assert_called_once_with()  # 3
-        # 1. We define a function that makes the assertion about the
-        #   thing we want to happen first: checking that the list’s
-        #   owner has been set.
-        # 2. We assign that check function as a side_effect to the
-        #   thing we want to check happened second. When the view
-        #   calls our mocked save function, it will go through this
-        #   assertion. We make sure to set this up before we actually
-        #   call the function we’re testing.
-        # 3. Finally, we make sure that the function with the
-        #   side_effect was actually triggered—that is, that we did .
-        #   save(). Otherwise, our assertion may actually never have
-        #   been run.
-
-        # Using mocks does tie you to specific ways of using an API.
-        # This is one of the many trade-offs involved in the use of
-        # mock objects.
-
-        # Here’s how we could test the sequence of events using
-        # mocks—you can mock out a function, and use it as a spy to
-        # check on the state of the world at the moment it’s called
-
-        # Two common mistakes when you’re using mock side effects are
-        # assigning the side effect too late (i.e., after you call
-        # the function under test), and forgetting to check that the
-        # side-effect function was actually called.
+        list_ = List.objects.first()
+        self.assertEqual(list_.owner, user)
 
 
 class ListViewTest(TestCase):
