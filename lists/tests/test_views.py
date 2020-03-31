@@ -61,18 +61,20 @@
 #   like that much more effort, and you’re tempted each time to put
 #   it off a little longer, and pretty soon—frog soup!
 
-from lists.views import home_page
-from lists.models import Item, List
-from lists.forms import (
-    DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
-    ExistingListItemForm, ItemForm
-)
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
+from unittest.mock import patch
+
+from lists.views import home_page
+from lists.models import Item, List
+from lists.forms import (
+    DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
+    ExistingListItemForm, ItemForm
+)
 
 User = get_user_model()
 
@@ -125,14 +127,41 @@ class NewListTest(TestCase):
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
 
-    def test_list_owner_is_saved_if_user_is_authenticated(self):
+    @patch('lists.views.List')  # 1
+    @patch('lists.views.ItemForm')  # 2
+    def test_list_owner_is_saved_if_user_is_authenticated(
+        self,
+        mockItemFormClass,
+        mockListClass
+    ):  # 3
         user = User.objects.create(email='a@b.com')
-        self.client.force_login(user)  # 1
+        self.client.force_login(user)  # 1.1
+
         self.client.post('/lists/new', data={'text': 'new item'})
-        list_ = List.objects.first()
-        self.assertEqual(list_.owner, user)
-        # 1. force_login() is the way you get the test client to make
+
+        mock_list = mockListClass.return_value  # 4
+        self.assertEqual(mock_list.owner, user)  # 5
+        # 1.1 force_login() is the way you get the test client to make
         #   requests with a logged-in user.
+        # 1. We mock out the List class to be able to get access to
+        #   any lists that might be created by the view.
+        # 2. We also mock out theItemForm. Otherwise, our form will
+        #   raise an error when we call form.save(), because it can’t
+        #   use a mock object as the foreign key for the Item it
+        #   wants to create. Once you start mocking, it can be hard
+        #   to stop!
+        # 3. The mock objects are injected into the test’s arguments
+        #   in the opposite order to which they’re declared. Tests
+        #   with lots of mocks often have this strange signature,
+        #   with the dangling ):. You get used to it!
+        # 4. The list instance that the view will have access to will
+        #   be the return value of the mocked List class.
+        # 5. And we can make assertions about whether the .owner
+        #   attribute is set on it.
+
+        # Using mocks does tie you to specific ways of using an API.
+        # This is one of the many trade-offs involved in the use of
+        # mock objects.
 
 
 class ListViewTest(TestCase):
