@@ -39,7 +39,7 @@ class MyListsTest(FunctionalTest):
         first_list_url = self.browser.current_url
 
         # She notices a "My lists" link, for the first time.
-        self.browser.find_element_by_link_text('My lists').click)()
+        self.browser.find_element_by_link_text('My lists').click()
 
         # She sees that her list is in there, named according to its
         # first list item
@@ -58,7 +58,7 @@ class MyListsTest(FunctionalTest):
         # She decides to start another list, just to see
         self.browser.get(self.live_server_url)
         self.add_list_item('Click cows')
-        second_list_url=self.browser.current_url
+        second_list_url = self.browser.current_url
 
         # Under "my lists", her new list appears
         self.browser.find_element_by_link_text('My lists').click()
