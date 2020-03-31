@@ -448,3 +448,16 @@ class MyListsTest(TestCase):
 #       the invalid case.
 # 7. Optionally, sanity-check that your form is rendered, and its
 #       errors are displayed.
+
+
+#               Thinking in Terms of Collaborators
+# In order to rewrite our tests to be fully isolated, we need to
+# throw out our old way of thinking about the tests in terms of the
+# “real” effects of the view on things like the database, and instead
+# think of it in terms of the objects it collaborates with, and how
+# it interacts with them.
+
+# In the new world, the view’s main collaborator will be a form
+# object, so we mock that out in order to be able to fully control
+# it, and in order to be able to define, by wishful thinking, the way
+# we want our form to work:
