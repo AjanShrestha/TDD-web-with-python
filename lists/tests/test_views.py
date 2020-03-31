@@ -63,18 +63,18 @@
 
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
-from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import resolve
 from django.utils.html import escape
+from unittest.mock import patch
 import unittest
 
-from lists.views import home_page
-from lists.models import Item, List
 from lists.forms import (
     DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
     ExistingListItemForm, ItemForm
 )
+from lists.models import Item, List
+from lists.views import new_list2
 
 User = get_user_model()
 
@@ -134,6 +134,31 @@ class NewListViewIntegratedTest(TestCase):
         self.client.post('/lists/new', data={'text': 'new item'})
         list_ = List.objects.first()
         self.assertEqual(list_.owner, user)
+
+
+@patch('lists.views.NewListForm')  # 2
+class NewListViewUnitTest(unittest.TestCase):  # 1
+
+    def setUp(self):
+        self.request = HttpRequest()
+        self.request.POST['text'] = 'new list item'  # 3
+
+    def test_passess_POST_data_to_NewListForm(self, mockNewListForm):
+        new_list2(self.request)
+        mockNewListForm.assert_called_once_wih(data=self.request.POST)  # 4
+
+    # 1. The Django TestCase class makes it too easy to write
+    #   integrated tests. As a way of making sure we’re writing “pure”
+    #   , isolated unit tests, we’ll only use unittest.TestCase.
+    # 2. We mock out the NewListForm class (which doesn’t even exist
+    #   yet). It’s going to be used in all the tests, so we mock it
+    #   out at the class level.
+    # 3. We set up a basic POST request in setUp, building up the
+    #   request by hand rather than using the (overly integrated)
+    #   Django Test Client.
+    # 4. And we check the first thing about our new view: it
+    #   initialises its collaborator, the NewListForm, with the
+    #   correct constructor—the data from the request.
 
 
 class ListViewTest(TestCase):
