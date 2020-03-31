@@ -127,41 +127,49 @@ class NewListTest(TestCase):
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
 
-    @patch('lists.views.List')  # 1
-    @patch('lists.views.ItemForm')  # 2
+    @patch('lists.views.List')
+    @patch('lists.views.ItemForm')
     def test_list_owner_is_saved_if_user_is_authenticated(
         self,
         mockItemFormClass,
         mockListClass
-    ):  # 3
+    ):
         user = User.objects.create(email='a@b.com')
-        self.client.force_login(user)  # 1.1
+        self.client.force_login(user)
+        mock_list = mockListClass.return_value
+
+        def check_owner_assigned():  # 1
+            self.assertEqual(mock_list.owner, user)
+        mock_list.save.side_effect = check_owner_assigned  # 2
 
         self.client.post('/lists/new', data={'text': 'new item'})
 
-        mock_list = mockListClass.return_value  # 4
-        self.assertEqual(mock_list.owner, user)  # 5
-        # 1.1 force_login() is the way you get the test client to make
-        #   requests with a logged-in user.
-        # 1. We mock out the List class to be able to get access to
-        #   any lists that might be created by the view.
-        # 2. We also mock out theItemForm. Otherwise, our form will
-        #   raise an error when we call form.save(), because it can’t
-        #   use a mock object as the foreign key for the Item it
-        #   wants to create. Once you start mocking, it can be hard
-        #   to stop!
-        # 3. The mock objects are injected into the test’s arguments
-        #   in the opposite order to which they’re declared. Tests
-        #   with lots of mocks often have this strange signature,
-        #   with the dangling ):. You get used to it!
-        # 4. The list instance that the view will have access to will
-        #   be the return value of the mocked List class.
-        # 5. And we can make assertions about whether the .owner
-        #   attribute is set on it.
+        mock_list.save.assert_called_once_with()  # 3
+        # 1. We define a function that makes the assertion about the
+        #   thing we want to happen first: checking that the list’s
+        #   owner has been set.
+        # 2. We assign that check function as a side_effect to the
+        #   thing we want to check happened second. When the view
+        #   calls our mocked save function, it will go through this
+        #   assertion. We make sure to set this up before we actually
+        #   call the function we’re testing.
+        # 3. Finally, we make sure that the function with the
+        #   side_effect was actually triggered—that is, that we did .
+        #   save(). Otherwise, our assertion may actually never have
+        #   been run.
 
         # Using mocks does tie you to specific ways of using an API.
         # This is one of the many trade-offs involved in the use of
         # mock objects.
+
+        # Here’s how we could test the sequence of events using
+        # mocks—you can mock out a function, and use it as a spy to
+        # check on the state of the world at the moment it’s called
+
+        # Two common mistakes when you’re using mock side effects are
+        # assigning the side effect too late (i.e., after you call
+        # the function under test), and forgetting to check that the
+        # side-effect function was actually called.
 
 
 class ListViewTest(TestCase):
