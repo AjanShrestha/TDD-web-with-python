@@ -177,6 +177,17 @@ class NewListViewUnitTest(unittest.TestCase):
         # 5. And we check that the redirect function was called with
         #   the object that the form returns on save.
 
+    @patch('lists.views.render')
+    def test_redirects_to_form_returned_object_if_form_invalid(self, mock_render, mockNewListForm):
+        mock_form = mockNewListForm.return_value
+        mock_form.is_valid.return_value = False
+
+        response = new_list2(self.request)
+
+        self.assertEqual(response, mock_render.return_value)
+        mock_render.assert_called_once_with(
+            self.request, 'home.html', {'form': mock_form})
+
 
 class ListViewTest(TestCase):
 
