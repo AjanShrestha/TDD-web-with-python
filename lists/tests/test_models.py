@@ -137,6 +137,12 @@ class ListModelTest(TestCase):
         new_list = List.objects.first()
         self.assertEqual(new_list.owner, user)
 
+    def test_lists_can_have_owners(self):
+        List(owner=User())  # should not raise
+
+    def test_lists_owner_is_optional(self):
+        List().full_clean()  # should not raise
+
 
 #                Useful Commands and Concepts
 # Running the Django dev server
