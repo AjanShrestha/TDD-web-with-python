@@ -255,3 +255,8 @@ class ListModelTest(TestCase):
 #   you think might be useful, just because it suggests itself at the
 #   time. Chances are, you won’t use it, or you won’t have
 #   anticipated your future requirements correctly.
+
+
+#                   In Memory
+# Use in-memory (unsaved) model objects in your tests whenever you
+# can; it makes your tests faster.
