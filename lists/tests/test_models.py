@@ -137,6 +137,9 @@ class ListModelTest(TestCase):
         new_list = List.objects.first()
         self.assertEqual(new_list.owner, user)
 
+    def test_create_returns_new_list_object(self):
+        self.fail()
+
     def test_lists_can_have_owners(self):
         List(owner=User())  # should not raise
 
