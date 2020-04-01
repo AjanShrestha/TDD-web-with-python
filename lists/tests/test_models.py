@@ -61,6 +61,7 @@
 #   like that much more effort, and you’re tempted each time to put
 #   it off a little longer, and pretty soon—frog soup!
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -139,8 +140,7 @@ class ListModelTest(TestCase):
 
     def test_create_new_optionally_saves_owner(self):
         user = User.objects.create()
-        List.create_new(first_item_text='new item text', owner=user)
-        new_list = List.objects.first()
+        new_list = List.create_new(first_item_text='new item text', owner=user)
         self.assertEqual(new_list.owner, user)
 
     def test_create_returns_new_list_object(self):
@@ -163,8 +163,6 @@ class ListModelTest(TestCase):
 # Running the unit tests
 #   python manage.py test
 
-# The unit-test/code cycle
-# 1. Run the unit tests in the terminal
 # 2. Make a minimal code change in the editor
 # 3. Repeat!
 

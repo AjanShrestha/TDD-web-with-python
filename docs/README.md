@@ -348,3 +348,17 @@ One problem that can result is to build inner components that are more general o
 In contrast, working outside-in allows you to use each layer to imagine the most convenient API you could want from the layer beneath it.
 
 > Outside-In TDD is sometimes called “programming by wishful thinking”, and you can see why. We start writing code at the higher levels based on what we wish we had at the lower levels, even though it doesn’t exist yet!
+
+## Outside-In TDD
+
+### Outside-In TDD
+
+A methodology for building code, driven by tests, which proceeds by starting from the “outside” layers (presentation, GUI), and moving “inwards” step by step, via view/controller layers, down towards the model layer. The idea is to drive the design of your code from the use to which it is going to be put, rather than trying to anticipate requirements from the ground up.
+
+### Programming by wishful thinking
+
+The outside-in process is sometimes called “programming by wishful thinking”. Actually, any kind of TDD involves some wishful thinking. We’re always writing tests for things that don’t exist yet.
+
+### The pitfalls of outside-in
+
+Outside-in isn’t a silver bullet. It encourages us to focus on things that are immediately visible to the user, but it won’t automatically remind us to write other critical tests that are less user-visible—things like security, for example. You’ll need to remember them yourself.
