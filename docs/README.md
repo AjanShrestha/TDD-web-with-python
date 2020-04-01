@@ -407,3 +407,30 @@ I think the answer is potentially yes, if they can provide a faster feedback cyc
 There may even be a case for building them as a separate test suite—you could have one suite of fast, isolated unit tests that don’t even use manage.py, because they don’t need any of the database cleanup and teardown that the Django test runner gives you, and then the intermediate layer that uses Django, and finally the functional tests layer that, say, talks to a staging server. It may be worth it if each layer delivers incremental benefits.
 
 It’s a judgement call. I hope that, by going through this chapter, I’ve given you a feel for what the trade-offs are.
+
+## On the Pros and Cons of Different Types of Tests, and Decoupling ORM Code
+
+### Functional tests
+
+- Provide the best guarantee that your application really works correctly, from the point of view of the user
+- But: it’s a slower feedback cycle
+- And they don’t necessarily help you write clean code
+
+### Integrated tests (reliant on, for example, the ORM or the Django Test Client)
+
+- Are quick to write
+- Are easy to understand
+- Will warn you of any integration issues
+- But: may not always drive good design (that’s up to you!)
+- And are usually slower than isolated tests
+
+### Isolated (“mocky”) tests
+
+- Involve the most hard work
+- Can be harder to read and understand
+- But: are the best ones for guiding you towards better design
+- And run the fastest
+
+### Decoupling our application from ORM code
+
+One of the consequences of striving to write isolated tests is that we find ourselves forced to remove ORM code from places like views and forms, by hiding it behind helper functions or methods. This can be beneficial in terms of decoupling your application from the ORM, but also just because it makes your code more readable. As with all things, it’s a judgement call as to whether the additional effort is worth it in particular circumstances.
