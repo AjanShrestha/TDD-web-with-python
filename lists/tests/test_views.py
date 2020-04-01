@@ -127,7 +127,6 @@ class NewListViewIntegratedTest(TestCase):
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
 
-    @unittest.skip
     def test_list_owner_is_saved_if_user_is_authenticated(self):
         user = User.objects.create(email='a@b.com')
         self.client.force_login(user)
@@ -495,3 +494,8 @@ class MyListsTest(TestCase):
 # object, so we mock that out in order to be able to fully control
 # it, and in order to be able to define, by wishful thinking, the way
 # we want our form to work:
+
+
+# Here’s an important lesson to learn about test isolation: it might
+# help you to drive out good design for individual layers, but it
+# won’t automatically verify the integration between your layers.
