@@ -45,7 +45,8 @@ def new_list(request):
     form = ItemForm(data=request.POST)
     if form.is_valid():
         list_ = List()
-        list_.owner = request.user
+        if request.user.is_authenticated:
+            list_.owner = request.user
         list_.save()
         form.save(for_list=list_)
         return redirect(list_)
@@ -112,3 +113,10 @@ def my_lists(request, email):
 # the shortcut, and leaving the test failing. In the next chapter,
 # we’ll come back to this exact point, and investigate how things
 # would have gone if we’d used more isolation.
+
+
+# One of the benefits of integrated tests is that they help you to
+# catch less predictable interactions like this. We’d forgotten to
+# write a test for the case where the user is not authenticated, but
+# because the integrated tests use the stack all the way down, errors
+# from the model layer came up to let us know we’d forgotten something
