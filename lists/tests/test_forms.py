@@ -55,7 +55,7 @@ class NewListFormTest(unittest.TestCase):
         form.is_valid()
         form.save(owner=user)
         mock_List_create_new.assert_called_once_with(
-            first_item_text='new item etxt', owner=user
+            first_item_text='new item text', owner=user
         )
 
 
