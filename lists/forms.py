@@ -27,12 +27,6 @@ class ItemForm(forms.models.ModelForm):
             'text': {'required': EMPTY_ITEM_ERROR}
         }
 
-    def save(self, for_list):
-        self.instance.list = for_list
-        return super().save()
-        # The .instance attribute on a form represents the database
-        # object that is being modi‐ fied or created.
-
 
 class NewListForm(ItemForm):
 
@@ -57,9 +51,6 @@ class ExistingListItemForm(ItemForm):
         except ValidationError as e:
             e.error_dict = {'text': [DUPLICATE_ITEM_ERROR]}
             self._update_errors(e)
-
-    def save(self):
-        return forms.models.ModelForm.save(self)
 
 
 #           Hiding ORM Code Behind Helper Methods
