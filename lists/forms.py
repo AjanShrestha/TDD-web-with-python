@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from lists.models import Item
+from lists.models import Item, List
 
 
 DUPLICATE_ITEM_ERROR = "You've already got this in your list"
