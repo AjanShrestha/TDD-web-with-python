@@ -362,3 +362,48 @@ The outside-in process is sometimes called “programming by wishful thinking”
 ### The pitfalls of outside-in
 
 Outside-in isn’t a silver bullet. It encourages us to focus on things that are immediately visible to the user, but it won’t automatically remind us to write other critical tests that are less user-visible—things like security, for example. You’ll need to remember them yourself.
+
+## When to Write Isolated Versus Integrated Tests
+
+Django’s testing tools make it very easy to quickly put together integrated tests. The test runner helpfully creates a fast, in-memory version of your database and resets it for you in between each test. The TestCase class and the test client make it easy to test your views, from checking whether database objects are modified, confirming that your URL mappings work, and inspecting the rendering of the templates. This lets you get started with testing very easily and get good coverage across your whole stack.
+
+On the other hand, these kinds of integrated tests won’t necessarily deliver the full benefit that rigorous unit testing and Outside-In TDD are meant to confer in terms of design.
+
+If we look at the example in this chapter, compare the code we had before and after:
+
+    def new*list(request):
+      form = ItemForm(data=request.POST)
+      if form.is_valid():
+        list* = List()
+        if not isinstance(request.user, AnonymousUser):
+          list*.owner = request.user
+        list*.save()
+        form.save(for*list=list*)
+        return redirect(list*)
+      else:
+        return render(request, 'home.html', {"form": form})
+
+    def new_list(request):
+      form = NewListForm(data=request.POST)
+      if form.is_valid():
+        list* = form.save(owner=request.user)
+        return redirect(list\_)
+      return render(request, 'home.html', {'form': form})
+
+If we hadn’t bothered to go down the isolation route, would we have bothered to refactor the view function? I know I didn’t in the first draft of this book. I’d like to think I would have “in real life”, but it’s hard to be sure. But writing isolated tests does make you very aware of where the complexities in your code lie.
+
+### Let Complexity Be Your Guide
+
+I’d say the point at which isolated tests start to become worth it is to do with complexity. The example in this book is extremely simple, so it’s not usually been worth it so far. Even in the example in this chapter, I can convince myself I didn’t really need to write those isolated tests.
+
+But once an application gains a little more complexity—if it starts growing any more layers between views and models, if you find yourself writing helper methods, or if you’re writing your own classes, then you will probably gain from writing more iso‐ lated tests.
+
+### Should You Do Both?
+
+We already have our suite of functional tests, which will serve the purpose of telling us if we ever make any mistakes in integrating the different parts of our code together. Writing isolated tests can help us to drive out better design for our code, and to verify correctness in finer detail. Would a middle layer of integration tests serve any additional purpose?
+
+I think the answer is potentially yes, if they can provide a faster feedback cycle, and help you identify more clearly what integration problems you suffer from—their tracebacks may provide you with better debug information than you would get from a functional test, for example.
+
+There may even be a case for building them as a separate test suite—you could have one suite of fast, isolated unit tests that don’t even use manage.py, because they don’t need any of the database cleanup and teardown that the Django test runner gives you, and then the intermediate layer that uses Django, and finally the functional tests layer that, say, talks to a staging server. It may be worth it if each layer delivers incremental benefits.
+
+It’s a judgement call. I hope that, by going through this chapter, I’ve given you a feel for what the trade-offs are.
