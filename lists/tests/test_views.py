@@ -182,6 +182,12 @@ class NewListViewUnitTest(unittest.TestCase):
         # 5. And we check that the redirect function was called with
         #   the object that the form returns on save.
 
+    # When doing Outside-In TDD with isolated tests, you need to keep
+    # track of each test’s implicit assumptions about the contract
+    # which the next layer should implement, and remember to test
+    # each of those in turn later. You could use our scratchpad for
+    # this, or create a placeholder test with a self.fail.
+
     @patch('lists.views.render')
     def test_redirects_to_form_returned_object_if_form_invalid(self, mock_render, mockNewListForm):
         mock_form = mockNewListForm.return_value
@@ -499,3 +505,19 @@ class MyListsTest(TestCase):
 # Here’s an important lesson to learn about test isolation: it might
 # help you to drive out good design for individual layers, but it
 # won’t automatically verify the integration between your layers.
+
+
+#       Thinking of Interactions Between Layers as “Contracts”
+# Ultimately, even if we had been writing nothing but isolated unit
+# tests, our functional tests would have picked up this particular
+# slip-up. But ideally we’d want our feedback cycle to be
+# quicker—functional tests may take a couple of minutes to run, or
+# even a few hours once your app starts to grow. Is there any way to
+# avoid this sort of problem before it happens?
+
+# Methodologically, the way to do it is to think about the
+# interaction between your layers in terms of contracts. Whenever
+# we mock out the behaviour of one layer, we have to make a mental
+# note that there is now an implicit contract between the layers, and
+# that a mock on one layer should probably translate into a test at
+# the layer below.
