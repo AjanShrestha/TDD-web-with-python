@@ -38,3 +38,8 @@ Part 3:
 - [chapter_18_spiking_custom_auth](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_18_spiking_custom_auth)
 - [chapter_19_mocking](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_19_mocking)
 - [chapter_20_fixtures_and_wait_decorator](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_20_fixtures_and_wait_decorator)
+- [chapter_21_server_side_debugging](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_21_server_side_debugging)
+- [chapter_22_outside_in](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_22_outside_in)
+- [chapter_22_outside_in](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_22_outside_in)
+- [chapter_23_purist_unit_tests](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_23_purist_unit_tests)
+- [chapter_24_CI](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_24_CI)
