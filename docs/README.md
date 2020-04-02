@@ -434,3 +434,21 @@ It’s a judgement call. I hope that, by going through this chapter, I’ve give
 ### Decoupling our application from ORM code
 
 One of the consequences of striving to write isolated tests is that we find ourselves forced to remove ORM code from places like views and forms, by hiding it behind helper functions or methods. This can be beneficial in terms of decoupling your application from the ORM, but also just because it makes your code more readable. As with all things, it’s a judgement call as to whether the additional effort is worth it in particular circumstances.
+
+## Tips on CI and Selenium Best Practices
+
+### Set up CI as soon as possible for your project
+
+As soon as your functional tests take more than a few seconds to run, you’ll find yourself avoiding running them all. Give this job to a CI server, to make sure that all your tests are getting run somewhere.
+
+### Set up screenshots and HTML dumps for failures
+
+Debugging test failures is easier if you can see what the page looked like when the failure occurred. This is particularly useful for debugging CI failures, but it’s also very useful for tests that you run locally.
+
+### Be prepared to bump your timeouts
+
+A CI server may not be as speedy as your laptop, especially if it’s under load, running multiple tests at the same time. Be prepared to be even more generous with your timeouts, in order to minimise the chance of random failures.
+
+### Look into hooking up CI and staging
+
+Tests that use LiveServerTestCase are all very well for dev boxes, but the true reassurance comes from running your tests against a real server. Look into getting your CI server to deploy to your staging server, and run the functional tests against that instead. It has the side benefit of testing your automated deploy scripts.
