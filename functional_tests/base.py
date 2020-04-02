@@ -88,6 +88,17 @@ class FunctionalTest(StaticLiveServerTestCase):
         # slightly obscure but couldn't find a better way!
         return any(error for (method, error) in self._outcome.errors)
 
+    def take_screenshot(self):
+        filename = self._get_filename() + '.png'
+        print(f'screenshotting to ${filename}')
+        self.browser.get_screenshot_as_file(filename)
+
+    def dump_html(self):
+        filename = self._get_filename() + '.html'
+        print(f'dumping page HTML to ${filename}')
+        with open(filename, 'w') as f:
+            f.write(self.browser.page_source)
+
     @wait
     def wait_for_row_in_list_table(self, row_text):
         table = self.browser.find_element_by_id('id_list_table')
