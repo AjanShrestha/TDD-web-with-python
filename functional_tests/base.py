@@ -12,6 +12,7 @@
 
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from datetime import datetime
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
@@ -20,6 +21,11 @@ import time
 
 from .server_tools import reset_database
 
+
+SCREEN_DUMP_LOCATION = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    'screendumps'
+)
 
 MAX_WAIT = 10
 
@@ -62,7 +68,25 @@ class FunctionalTest(StaticLiveServerTestCase):
     def tearDown(self):
         # The only exception tearDown doesn't run is if an exception
         # inside setUp
+        if self._test_has_failed():
+            if not os.path.exists(SCREEN_DUMP_LOCATION):
+                os.makedirs(SCREEN_DUMP_LOCATION)
+            for ix, handle in enumerate(self.browser.window_handles):
+                self._windowid = ix
+                self.browser.switch_to_window(handle)
+                self.take_screenshot()
+                self.dump_html()
         self.browser.quit()
+        super().tearDown()
+        # We first create a directory for our screenshots if
+        # necessary. Then we iterate through all the open browser
+        # tabs and pages, and use some Selenium methods, get_screen
+        # shot_as_file and browser.page_source, for our image and
+        # HTML dump
+
+    def _test_has_failed(self):
+        # slightly obscure but couldn't find a better way!
+        return any(error for (method, error) in self._outcome.errors)
 
     @wait
     def wait_for_row_in_list_table(self, row_text):
