@@ -43,3 +43,4 @@ Part 3:
 - [chapter_22_outside_in](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_22_outside_in)
 - [chapter_23_purist_unit_tests](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_23_purist_unit_tests)
 - [chapter_24_CI](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_24_CI)
+- [chapter_25_page_pattern](https://github.com/AjanShrestha/TDD-web-with-python/tree/chapter_25_page_pattern)
