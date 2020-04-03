@@ -27,12 +27,30 @@ class ListPage(object):
         self.wait_for_row_in_list_table(item_text, new_item_no)
         return self  # 4
 
-    # 1. It’s initialised with an object that represents the current
-    #   test. That gives us the ability to make assertions, access
-    #   the browser instance via self.test.browser, and use the self.
-    #   test.wait_for function.
-    # 2. I’ve copied across some of the existing helper methods from
-    #   base.py, but I’ve tweaked them slightly...
-    # 3. For example, they make use of this new method.
-    # 4 Returning self is just a convenience. It enables method
-    #   chaining, which we’ll see in action immediately.
+    def get_share_box(self):
+        return self.test.browser.find_element_by_css_selector(
+            'input["name=sharee"]'
+        )
+
+    def get_shared_with_list(self):
+        return self.test.browser.find_elements_by_css_selector(
+            '.list-sharee'
+        )
+
+    def share_list_with(self, email):
+        self.get_share_box().send_keys(email)
+        self.get_share_box().send_keys(Keys.ENTER)
+        self.test.wait_for(lambda: self.test.assertIn(
+            email,
+            [item.text for item in self.get_shared_with_list()]
+        ))
+
+        # 1. It’s initialised with an object that represents the current
+        #   test. That gives us the ability to make assertions, access
+        #   the browser instance via self.test.browser, and use the self.
+        #   test.wait_for function.
+        # 2. I’ve copied across some of the existing helper methods from
+        #   base.py, but I’ve tweaked them slightly...
+        # 3. For example, they make use of this new method.
+        # 4 Returning self is just a convenience. It enables method
+        #   chaining, which we’ll see in action immediately.
