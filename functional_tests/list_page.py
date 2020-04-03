@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 
-from .base import wait:
+from .base import wait
 
 
 class ListPage(object):
@@ -12,7 +12,7 @@ class ListPage(object):
         return self.test.browser.find_elements_by_css_selector('#id_list_table tr')
 
     @wait
-    def wait_for_row_in_list_table(self, item_next, item_number):  # 2
+    def wait_for_row_in_list_table(self, item_text, item_number):  # 2
         expected_row_text = f'{item_number}: {item_text}'
         rows = self.get_table_rows()
         self.test.assertIn(expected_row_text, [row.text for row in rows])
