@@ -54,3 +54,22 @@ class ListPage(object):
         # 3. For example, they make use of this new method.
         # 4 Returning self is just a convenience. It enables method
         #   chaining, which we’ll see in action immediately.
+
+
+#                      Page Pattern
+# We’ve already built several helper methods for our FTs, including
+# add_list_item, which we’ve used here, but if we just keep adding
+# more and more, it’s going to get very crowded. I’ve worked on a
+# base FT class that was over 1,500 lines long, and that got pretty
+# unwieldy.
+
+# Page objects are an alternative which encourage us to store all the
+# information and helper methods about the different types of pages
+# on our site in a single place.
+
+# The idea behind the Page pattern is that it should capture all the
+# information about a particular page in your site, so that if,
+# later, you want to go and make changes to that page—even just
+# simple tweaks to its HTML layout, for example—you have a single
+# place to go to adjust your functional tests, rather than having to
+# dig through dozens of FTs.
