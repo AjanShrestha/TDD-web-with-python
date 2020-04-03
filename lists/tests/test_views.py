@@ -309,7 +309,7 @@ class MyListsTest(TestCase):
 class ShareListTest(TestCase):
 
     def test_sharing_a_list_via_post(self):
-        sharee = User.objects.create(email='share,with@me.com')
+        sharee = User.objects.create(email='share.with@me.com')
         list_ = List.objects.create()
         self.client.post(
             f'/lists/{list_.id}/share',
