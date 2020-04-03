@@ -69,6 +69,11 @@ def my_lists(request, email):
     return render(request, 'my_lists.html', {'owner': owner})
 
 
+def share_list(request, list_id):
+    list_ = List.objects.get(id=list_id)
+    return redirect(list_)
+
+
 # Our two views are now looking very much like “normal” Django views:
 # * they take information from a user’s request,
 # * combine it with some custom logic or information from the URL
