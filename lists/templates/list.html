@@ -16,6 +16,10 @@
     </tr>
     {% endfor %}
 </table>
+
+{% if list.owner %}
+<p>List owner: <span id="id_list_onwer">{{ list.owner.email }}</span></p>
+{% endif %}
 {% endblock %}
 
 {% block extra_content %}
