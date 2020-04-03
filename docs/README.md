@@ -452,3 +452,13 @@ A CI server may not be as speedy as your laptop, especially if it’s under load
 ### Look into hooking up CI and staging
 
 Tests that use LiveServerTestCase are all very well for dev boxes, but the true reassurance comes from running your tests against a real server. Look into getting your CI server to deploy to your staging server, and run the functional tests against that instead. It has the side benefit of testing your automated deploy scripts.
+
+## The Page Pattern
+
+### Apply DRY to your functional tests
+
+Once your FT suite starts to grow, you’ll find that different tests will inevitably find themselves using similar parts of the UI. Try to avoid having constants, like the HTML IDs or classes of particular UI elements, duplicated between your FTs.
+
+### The Page pattern
+
+Moving helper methods into a base FunctionalTest class can become unwieldy. Consider using individual Page objects to hold all the logic for dealing with particular parts of your site.
