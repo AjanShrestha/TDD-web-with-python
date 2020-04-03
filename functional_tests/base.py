@@ -69,6 +69,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
             reset_database(self.staging_server)
+        else:
+            self.live_server_url = 'http://127.0.0.1:8000'
 
     def tearDown(self):
         # The only exception tearDown doesn't run is if an exception
@@ -162,6 +164,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             value=session_key,  # 2
             path='/',
         ))
+        self.browser.get(self.live_server_url)
         # 1. We create a session object in the database. The session
         #   key is the primary key of the user object (which is
         #   actually the user’s email address).
