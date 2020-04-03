@@ -55,6 +55,9 @@ class ListPage(object):
         # 4 Returning self is just a convenience. It enables method
         #   chaining, which we’ll see in action immediately.
 
+    def get_list_owner(self):
+        return self.test.browser.find_elements_by_id('id_list_owner').text
+
 
 #                      Page Pattern
 # We’ve already built several helper methods for our FTs, including
