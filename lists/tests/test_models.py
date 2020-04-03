@@ -148,6 +148,13 @@ class ListModelTest(TestCase):
         new_list = List.objects.first()
         self.assertEqual(returned, new_list)
 
+    def test_can_share_with_another_user(self):
+        list_ = List.objects.create()
+        user = User.objects.create(email='a@b.com')
+        list_.shared_with.add('a@b.com')
+        list_in_db = List.objects.get(id=list_.id)
+        self.assertIn(user, list_in_db.shared_with.all())
+
     def test_lists_can_have_owners(self):
         List(owner=User())  # should not raise
 
