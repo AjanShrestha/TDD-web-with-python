@@ -15,7 +15,7 @@ def quit_if_possible(browser):
 class SharingTest(FunctionalTest):
 
     def test_can_share_a_list_with_another_user(self):
-        # Edith is a logged-in-user
+        # Edith is a logged-in user
         self.create_pre_authenticated_session('edith@example.com')
         edith_browser = self.browser
         self.addCleanup(lambda: quit_if_possible(edith_browser))
@@ -28,6 +28,7 @@ class SharingTest(FunctionalTest):
 
         # Edith goes to the home page and starts a list
         self.browser = edith_browser
+        self.browser.get(self.live_server_url)
         list_page = ListPage(self).add_list_item('Get help')
 
         # She notices a "Share this list" option
@@ -45,7 +46,7 @@ class SharingTest(FunctionalTest):
         self.browser = oni_browser
         MyListsPage(self).go_to_my_lists_page()
 
-        # He sees Edith/s list on there!
+        # He sees Edith's list in there!
         self.browser.find_element_by_link_text('Get help').click()
 
         # On the list page, Oniciferous can see says that it's Edith's list

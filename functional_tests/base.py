@@ -163,8 +163,10 @@ class FunctionalTest(StaticLiveServerTestCase):
             name=settings.SESSION_COOKIE_NAME,
             value=session_key,  # 2
             path='/',
+            secure=False,
+            httpOnly=True,
         ))
-        self.browser.get(self.live_server_url)
+        self.browser.refresh()
         # 1. We create a session object in the database. The session
         #   key is the primary key of the user object (which is
         #   actually the user’s email address).
